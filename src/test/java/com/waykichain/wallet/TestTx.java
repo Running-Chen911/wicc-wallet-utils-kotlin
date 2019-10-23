@@ -1,10 +1,12 @@
 package com.waykichain.wallet;
 
-import com.waykichain.wallet.base.CoinType;
-import com.waykichain.wallet.base.UCoinDest;
-import com.waykichain.wallet.base.WaykiNetworkType;
-import com.waykichain.wallet.base.params.*;
+import com.waykichain.wallet.encode.UCoinDest;
 import com.waykichain.wallet.impl.LegacyWallet;
+import com.waykichain.wallet.transaction.CoinType;
+import com.waykichain.wallet.transaction.params.WaykiCommonTxParams;
+import com.waykichain.wallet.transaction.params.WaykiTestNetParams;
+import com.waykichain.wallet.transaction.params.WaykiUCoinContractTxParams;
+import com.waykichain.wallet.transaction.params.WaykiUCoinTxParams;
 import com.waykichain.wallet.util.ContractUtil;
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
@@ -12,7 +14,6 @@ import org.bitcoinj.core.LegacyAddress;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.waykichain.wallet.util.BIP44Util;
 import org.waykichain.wallet.util.MnemonicUtil;
 
 import java.util.Arrays;
@@ -37,11 +38,11 @@ public class TestTx {
     * */
     @Test
     public void generateWalletFromMnemonic(){
-        String words = "vote despair mind rescue crumble choice garden elite venture cattle oxygen voyage";
+       /* String words = "vote despair mind rescue crumble choice garden elite venture cattle oxygen voyage";
         WaykiTestNetParams networkParameters = WaykiTestNetParams.Companion.getInstance(); //generate Testnet Address From Mnemonic
        // WaykiMainNetParams networkParameters = WaykiMainNetParams.Companion.getInstance(); //generate Mainnet Address From Mnemonic
         BIP44Util.WaykiWallet wallet= BIP44Util.Companion.generateWaykiWallet(words,networkParameters);
-        logger.info("PrivateKey:"+wallet.getPrivateKey()+"\n"+"Address:"+wallet.getAddress()+"\n"+"PublicKeyKey:"+wallet.getPubKey()+"\n");
+        logger.info("PrivateKey:"+wallet.getPrivateKey()+"\n"+"Address:"+wallet.getAddress()+"\n"+"PublicKeyKey:"+wallet.getPubKey()+"\n");*/
     }
 
     /*
@@ -57,7 +58,7 @@ public class TestTx {
         String pubKey = srcKey.getPublicKeyAsHex(); //wallet public key
         String destAddr = "wWTStcDL4gma6kPziyHhFGAP6xUzKpA5if";//dest address
         String memo="test transfer";//transfer memo
-        WaykiCommonTxParams txParams =new WaykiCommonTxParams(WaykiNetworkType.TEST_NET, 34550, pubKey,10000,
+        WaykiCommonTxParams txParams =new WaykiCommonTxParams(ChainIds.Companion.getWAYKICHAIN_MAINNET(), 34550, pubKey,10000,
                 1100000000000L, "0-1", destAddr,memo);
         txParams.signTx(srcKey);
         String tx = wallet.createCommonTransactionRaw(txParams);

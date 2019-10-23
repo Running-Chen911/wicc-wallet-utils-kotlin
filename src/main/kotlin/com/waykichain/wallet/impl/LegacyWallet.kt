@@ -16,16 +16,12 @@
 
 package com.waykichain.wallet.impl
 
-import com.waykichain.wallet.LegacyWalletInterface
-import com.waykichain.wallet.base.WalletAddress
-import com.waykichain.wallet.base.WaykiNetworkType
-import com.waykichain.wallet.base.params.*
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.LegacyAddress
+import com.waykichain.wallet.impl.ledger.LegacyWalletInterface
+import com.waykichain.wallet.transaction.params.*
 
 class LegacyWallet: LegacyWalletInterface {
 
-    override fun generateWalletAddress(networkType: WaykiNetworkType): WalletAddress {
+   /* override fun generateWalletAddress(networkType: WaykiNetworkType): WalletAddress {
         val params = if (networkType == WaykiNetworkType.MAIN_NET) WaykiMainNetParams.instance else WaykiTestNetParams.instance
         val ecKey = ECKey()
         val privKeyWiF = ecKey.getPrivateKeyAsWiF(params)
@@ -34,7 +30,7 @@ class LegacyWallet: LegacyWalletInterface {
 
         val walletAddress = WalletAddress(ecKey, privKeyWiF, address)
         return walletAddress
-    }
+    }*/
 
     override fun createRegisterTransactionRaw(params: WaykiRegisterAccountTxParams): String {
         return  params.serializeTx()

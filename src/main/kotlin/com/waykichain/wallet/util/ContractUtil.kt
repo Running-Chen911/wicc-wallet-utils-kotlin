@@ -1,7 +1,5 @@
 package com.waykichain.wallet.util
 
-import org.bitcoinj.core.Base58
-import org.bitcoinj.core.Utils
 import java.nio.ByteBuffer
 
 class ContractUtil {

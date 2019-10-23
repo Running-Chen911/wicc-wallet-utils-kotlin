@@ -1,15 +1,15 @@
 package com.waykichain.wallet
 
-import com.waykichain.wallet.base.OperVoteFund
-import com.waykichain.wallet.base.VoteOperType
-import com.waykichain.wallet.base.params.WaykiDelegateTxParams
+import com.waykichain.wallet.encode.OperVoteFund
 import com.waykichain.wallet.impl.LegacyWallet
+import com.waykichain.wallet.transaction.VoteOperType
+import com.waykichain.wallet.transaction.params.WaykiDelegateTxParams
+import com.waykichain.wallet.util.BIP44Path
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.wallet.DeterministicKeyChain
 import org.bitcoinj.wallet.DeterministicSeed
 import org.junit.Test
 import org.slf4j.LoggerFactory
-import org.waykichain.wallet.util.BIP44Util
 import org.waykichain.wallet.util.MnemonicUtil
 import java.util.*
 
@@ -68,7 +68,7 @@ class RunWallet {
 
         val seed = DeterministicSeed(wordList, null, "", 0L)
         val keyChain = DeterministicKeyChain.builder().seed(seed).build()
-        val mainKey = keyChain.getKeyByPath(BIP44Util.generatePath(BIP44Util.WAYKICHAIN_WALLET_PATH + "/0/0"), true)
+        val mainKey = keyChain.getKeyByPath(MnemonicUtil.generatePath(BIP44Path.WAYKICHAIN_WALLET_PATH ), true)
         return ECKey.fromPrivate(mainKey.privKey)
     }
 

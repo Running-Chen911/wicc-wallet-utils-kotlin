@@ -1,8 +1,11 @@
 package com.waykichain.wallet
 
-import com.waykichain.wallet.base.*
-import com.waykichain.wallet.base.params.*
+import com.waykichain.wallet.encode.CAsset
+import com.waykichain.wallet.encode.OperVoteFund
+import com.waykichain.wallet.encode.UCoinDest
 import com.waykichain.wallet.impl.LegacyWallet
+import com.waykichain.wallet.transaction.*
+import com.waykichain.wallet.transaction.params.*
 import com.waykichain.wallet.util.ContractUtil
 import org.bitcoinj.core.DumpedPrivateKey
 import org.bitcoinj.core.ECKey
@@ -11,7 +14,6 @@ import org.bitcoinj.core.Utils
 import org.junit.Test
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.util.*
 
 
 class TestTransaction {
@@ -52,7 +54,7 @@ class TestTransaction {
         val pubKey = srcKey.publicKeyAsHex
         val destAddr = "wWTStcDL4gma6kPziyHhFGAP6xUzKpA5if"
         val memo="test transfer"
-        val txParams = WaykiCommonTxParams(WaykiNetworkType.TEST_NET, 166690, pubKey,100000000,
+        val txParams = WaykiCommonTxParams(ChainIds.WAYKICHAIN_MAINNET, 166690, pubKey,100000000,
                 100000000, "32714-5", destAddr,memo)
         txParams.signTx(srcKey)
         val tx = wallet.createCommonTransactionRaw(txParams)
@@ -81,7 +83,7 @@ class TestTransaction {
         val pubKey = srcKey.publicKeyAsHex
         val memo="测试转账"
         val destAddr = "WQRwCMmQGy2XvpATTai6AtGhrRrdXDQzQh"
-        val txParams = WaykiCommonTxParams(WaykiNetworkType.MAIN_NET, 1926165, pubKey,10000, 10000,
+        val txParams = WaykiCommonTxParams(ChainIds.WAYKICHAIN_MAINNET, 1926165, pubKey,10000, 10000,
                 "926152-1", destAddr, memo)
         txParams.signTx(srcKey)
         val tx = wallet.createCommonTransactionRaw(txParams)
@@ -111,7 +113,7 @@ class TestTransaction {
         val destAddr = "wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4"
         val memo = "转账"
 
-        val dest1=UCoinDest(LegacyAddress.fromBase58(netParams,destAddr),coinSymbol,coinAmount)
+        val dest1= UCoinDest(LegacyAddress.fromBase58(netParams, destAddr), coinSymbol, coinAmount)
         val dests= arrayListOf<UCoinDest>(dest1)
 
         val txParams = WaykiUCoinTxParams(nValidHeight, regid, pubKey, dests.toList() , feeSymbol, fees, memo)
@@ -174,7 +176,7 @@ class TestTransaction {
         val contractByte = ContractUtil.hexString2binaryString("f001")
         val txParams = WaykiUCoinContractTxParams(srcKey.publicKeyAsHex, 727702,
                 1000000, value, "0-1",
-                appid, contractByte, CoinType.WICC.type,CoinType.WUSD.type)
+                appid, contractByte, CoinType.WICC.type, CoinType.WUSD.type)
         txParams.signTx(srcKey)
         val tx = wallet.createUCoinContractInvokeRaw(txParams)
         logger.info(tx)
@@ -450,7 +452,7 @@ class TestTransaction {
         val srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13"
         val srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).key
         val symbol="STOOOOO"
-        val asset=CAsset(symbol,"0-1","SS TOKEN",1000000000000000,true)
+        val asset= CAsset(symbol, "0-1", "SS TOKEN", 1000000000000000, true)
         val txParams = WaykiAssetIssueTxParams(nValidHeight, fee, userId,
                 feeSymbol,asset)
         txParams.signTx(srcKey)
@@ -476,7 +478,7 @@ class TestTransaction {
         val netParams = WaykiTestNetParams.instance
         val srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13"
         val srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).key
-        val asset=AssetUpdateData(AssetUpdateType.OWNER_UID,"0-2")  //update asset owner
+        val asset= AssetUpdateData(AssetUpdateType.OWNER_UID, "0-2")  //update asset owner
 
        // val asset=AssetUpdateData(AssetUpdateType.NAME,"TestCoin") // update asset name
 
