@@ -137,7 +137,7 @@ public class LegacyAddress extends Address {
      * @throws AddressFormatException
      *             if the given base58 doesn't parse or the checksum is invalid
      * @throws AddressFormatException.WrongNetwork
-     *             if the given address is valid but for a different chain (eg testnet vs mainnet)
+     *             if the given address is valid but for a different chain (eg TESTNET vs MAINNET)
      */
     public static LegacyAddress fromBase58(@Nullable NetworkParameters params, String base58)
             throws AddressFormatException, AddressFormatException.WrongNetwork {

@@ -90,8 +90,8 @@ public class AddressFormatException extends IllegalArgumentException {
 
     /**
      * This exception is thrown by the {@link PrefixedChecksummedBytes} hierarchy of classes when you try and decode an
-     * address with a prefix (version header or human-readable part) that used by another network (usually: mainnet vs
-     * testnet). You shouldn't allow the user to proceed in this case as they are trying to send money across different
+     * address with a prefix (version header or human-readable part) that used by another network (usually: MAINNET vs
+     * TESTNET). You shouldn't allow the user to proceed in this case as they are trying to send money across different
      * chains, an operation that is guaranteed to destroy the money.
      */
     public static class WrongNetwork extends InvalidPrefix {

@@ -166,7 +166,7 @@ public class Context {
     /**
      * Returns the {@link NetworkParameters} specified when this context was (auto) created. The
      * network parameters defines various hard coded constants for a specific instance of a Bitcoin network, such as
-     * main net, testnet, etc.
+     * main net, TESTNET, etc.
      */
     public NetworkParameters getParams() {
         return params;

@@ -56,7 +56,7 @@ public abstract class NetworkParameters {
 
     /** The string returned by getId() for the main, production network where people trade things. */
     public static final String ID_MAINNET = "org.bitcoin.production";
-    /** The string returned by getId() for the testnet. */
+    /** The string returned by getId() for the TESTNET. */
     public static final String ID_TESTNET = "org.bitcoin.test";
     /** The string returned by getId() for regtest mode. */
     public static final String ID_REGTEST = "org.bitcoin.regtest";
@@ -177,7 +177,7 @@ public abstract class NetworkParameters {
         return MainNetParams.get();
     }
 
-    /** Returns a testnet params modified to allow any difficulty target. */
+    /** Returns a TESTNET params modified to allow any difficulty target. */
     @Deprecated
     public static NetworkParameters unitTests() {
         return UnitTestParams.get();
@@ -349,7 +349,7 @@ public abstract class NetworkParameters {
     }
 
     /**
-     * If we are running in testnet-in-a-box mode, we allow connections to nodes with 0 non-genesis blocks.
+     * If we are running in TESTNET-in-a-box mode, we allow connections to nodes with 0 non-genesis blocks.
      */
     public boolean allowEmptyPeerChain() {
         return true;

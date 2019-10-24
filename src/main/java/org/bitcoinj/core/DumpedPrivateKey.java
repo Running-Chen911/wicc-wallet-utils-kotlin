@@ -39,7 +39,7 @@ public class DumpedPrivateKey extends PrefixedChecksummedBytes {
      * @throws AddressFormatException
      *             if the given base58 doesn't parse or the checksum is invalid
      * @throws AddressFormatException.WrongNetwork
-     *             if the given private key is valid but for a different chain (eg testnet vs mainnet)
+     *             if the given private key is valid but for a different chain (eg TESTNET vs MAINNET)
      */
     public static DumpedPrivateKey fromBase58(@Nullable NetworkParameters params, String base58)
             throws AddressFormatException, AddressFormatException.WrongNetwork {

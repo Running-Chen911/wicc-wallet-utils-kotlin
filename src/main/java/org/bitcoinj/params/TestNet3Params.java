@@ -27,7 +27,7 @@ import java.util.Date;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * Parameters for the testnet, a separate public instance of Bitcoin that has relaxed rules suitable for development
+ * Parameters for the TESTNET, a separate public instance of Bitcoin that has relaxed rules suitable for development
  * and testing of applications and new Bitcoin versions.
  */
 public class TestNet3Params extends AbstractBitcoinNetParams {
@@ -57,11 +57,11 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
 
         dnsSeeds = new String[] {
-                "testnet-seed.bitcoin.jonasschnelli.ch", // Jonas Schnelli
-                "testnet-seed.bluematt.me",              // Matt Corallo
-                "testnet-seed.bitcoin.petertodd.org",    // Peter Todd
-                "testnet-seed.bitcoin.schildbach.de",    // Andreas Schildbach
-                "bitcoin-testnet.bloqseeds.net",         // Bloq
+                "TESTNET-seed.bitcoin.jonasschnelli.ch", // Jonas Schnelli
+                "TESTNET-seed.bluematt.me",              // Matt Corallo
+                "TESTNET-seed.bitcoin.petertodd.org",    // Peter Todd
+                "TESTNET-seed.bitcoin.schildbach.de",    // Andreas Schildbach
+                "bitcoin-TESTNET.bloqseeds.net",         // Bloq
         };
         addrSeeds = null;
         bip32HeaderPub = 0x043587CF;
@@ -94,7 +94,7 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         if (!isDifficultyTransitionPoint(storedPrev.getHeight()) && nextBlock.getTime().after(testnetDiffDate)) {
             Block prev = storedPrev.getHeader();
 
-            // After 15th February 2012 the rules on the testnet change to avoid people running up the difficulty
+            // After 15th February 2012 the rules on the TESTNET change to avoid people running up the difficulty
             // and then leaving, making it too hard to mine a block. On non-difficulty transition points, easy
             // blocks are allowed if there has been a span of 20 minutes without one.
             final long timeDelta = nextBlock.getTimeSeconds() - prev.getTimeSeconds();

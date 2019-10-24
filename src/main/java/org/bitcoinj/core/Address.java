@@ -48,7 +48,7 @@ public abstract class Address extends PrefixedChecksummedBytes {
      * @throws AddressFormatException
      *             if the given string doesn't parse or the checksum is invalid
      * @throws AddressFormatException.WrongNetwork
-     *             if the given string is valid but not for the expected network (eg testnet vs mainnet)
+     *             if the given string is valid but not for the expected network (eg TESTNET vs MAINNET)
      */
     public static Address fromString(@Nullable NetworkParameters params, String str)
             throws AddressFormatException {

@@ -14,16 +14,11 @@
  * all copies or substantial portions of the Software.
  */
 
-package com.waykichain.wallet.impl.ledger
+package com.waykichain.wallet.transaction
 
 import com.waykichain.wallet.transaction.params.*
 
 interface LegacyWalletInterface {
-
-    /**
-     * creation of wallet priv/pub key pair and corresponding address
-     */
-   // fun generateWalletAddress(networkType: WaykiNetworkType): WalletAddress
 
     /**
      * offline creation of Register Account Transaction raw data

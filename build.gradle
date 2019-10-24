@@ -61,6 +61,11 @@ dependencies {
     compileOnly 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
     compile 'com.google.guava:guava:21.0'
     compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.4.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.5.0@aar'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.easymock:easymock:3.2'

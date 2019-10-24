@@ -40,4 +40,5 @@ class WalletManager {
              return wallet
          }
     }
+
 }

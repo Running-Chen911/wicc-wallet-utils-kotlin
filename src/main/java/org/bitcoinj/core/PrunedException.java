@@ -20,7 +20,7 @@ package org.bitcoinj.core;
 
 /**
  * PrunedException is thrown in cases where a fully verifying node has deleted (pruned) old block data that turned
- * out to be necessary for handling a re-org. Normally this should never happen unless you're playing with the testnet
+ * out to be necessary for handling a re-org. Normally this should never happen unless you're playing with the TESTNET
  * as the pruning parameters should be set very conservatively, such that an absolutely enormous re-org would be
  * required to trigger it.
  */

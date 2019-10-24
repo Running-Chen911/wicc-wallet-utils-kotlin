@@ -606,7 +606,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
         try {
             PreparedStatement s =
                     conn.get().prepareStatement(getInsertHeadersSQL());
-            // We skip the first 4 bytes because (on mainnet) the minimum target has 4 0-bytes
+            // We skip the first 4 bytes because (on MAINNET) the minimum target has 4 0-bytes
             byte[] hashBytes = new byte[28];
             System.arraycopy(storedBlock.getHeader().getHash().getBytes(), 4, hashBytes, 0, 28);
             s.setBytes(1, hashBytes);
@@ -624,7 +624,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
 
             PreparedStatement s = conn.get().prepareStatement(getUpdateHeadersSQL());
             s.setBoolean(1, true);
-            // We skip the first 4 bytes because (on mainnet) the minimum target has 4 0-bytes
+            // We skip the first 4 bytes because (on MAINNET) the minimum target has 4 0-bytes
             byte[] hashBytes = new byte[28];
             System.arraycopy(storedBlock.getHeader().getHash().getBytes(), 4, hashBytes, 0, 28);
             s.setBytes(2, hashBytes);
@@ -647,7 +647,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
     @Override
     public void put(StoredBlock storedBlock, StoredUndoableBlock undoableBlock) throws BlockStoreException {
         maybeConnect();
-        // We skip the first 4 bytes because (on mainnet) the minimum target has 4 0-bytes
+        // We skip the first 4 bytes because (on MAINNET) the minimum target has 4 0-bytes
         byte[] hashBytes = new byte[28];
         System.arraycopy(storedBlock.getHeader().getHash().getBytes(), 4, hashBytes, 0, 28);
         int height = storedBlock.getHeight();
@@ -724,7 +724,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
         try {
             s = conn.get()
                     .prepareStatement(getSelectHeadersSQL());
-            // We skip the first 4 bytes because (on mainnet) the minimum target has 4 0-bytes
+            // We skip the first 4 bytes because (on MAINNET) the minimum target has 4 0-bytes
             byte[] hashBytes = new byte[28];
             System.arraycopy(hash.getBytes(), 4, hashBytes, 0, 28);
             s.setBytes(1, hashBytes);
@@ -780,7 +780,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
         try {
             s = conn.get()
                     .prepareStatement(getSelectUndoableBlocksSQL());
-            // We skip the first 4 bytes because (on mainnet) the minimum target has 4 0-bytes
+            // We skip the first 4 bytes because (on MAINNET) the minimum target has 4 0-bytes
 
             byte[] hashBytes = new byte[28];
             System.arraycopy(hash.getBytes(), 4, hashBytes, 0, 28);

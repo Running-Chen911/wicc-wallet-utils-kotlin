@@ -14,23 +14,11 @@
  * all copies or substantial portions of the Software.
  */
 
-package com.waykichain.wallet.impl
+package com.waykichain.wallet.transaction
 
-import com.waykichain.wallet.impl.ledger.LegacyWalletInterface
 import com.waykichain.wallet.transaction.params.*
 
 class LegacyWallet: LegacyWalletInterface {
-
-   /* override fun generateWalletAddress(networkType: WaykiNetworkType): WalletAddress {
-        val params = if (networkType == WaykiNetworkType.MAIN_NET) WaykiMainNetParams.instance else WaykiTestNetParams.instance
-        val ecKey = ECKey()
-        val privKeyWiF = ecKey.getPrivateKeyAsWiF(params)
-        val pubKeyHash = ecKey.pubKeyHash
-        val address = LegacyAddress.fromPubKeyHash(params, pubKeyHash).toString()
-
-        val walletAddress = WalletAddress(ecKey, privKeyWiF, address)
-        return walletAddress
-    }*/
 
     override fun createRegisterTransactionRaw(params: WaykiRegisterAccountTxParams): String {
         return  params.serializeTx()

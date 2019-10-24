@@ -3,7 +3,7 @@ package com.waykichain.wallet
 import com.waykichain.wallet.encode.CAsset
 import com.waykichain.wallet.encode.OperVoteFund
 import com.waykichain.wallet.encode.UCoinDest
-import com.waykichain.wallet.impl.LegacyWallet
+import com.waykichain.wallet.transaction.LegacyWallet
 import com.waykichain.wallet.transaction.*
 import com.waykichain.wallet.transaction.params.*
 import com.waykichain.wallet.util.ContractUtil
