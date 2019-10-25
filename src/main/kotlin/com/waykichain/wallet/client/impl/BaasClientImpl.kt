@@ -18,8 +18,12 @@ class BaasClientImpl(baseUrl: String) :BaasClient{
         this.baasRetrofit =BaasRetrofit(baseUrl)
     }
 
-    override fun getAccountInfo(body: AddressBean): Observable<AccointInfo> {
-     return  baasRetrofit!!.apiService?.getAccountInfo(body)
+    override fun getAccountInfo(address: String): AccointInfo? {
+     var accointInfo:AccointInfo?=null
+     baasRetrofit!!.apiService?.getAccountInfo(AddressBean(address)).mSubscribe {
+        accointInfo=it
+     }
+        return accointInfo
     }
 
     override val mDisposablePool: CompositeDisposable by lazy { CompositeDisposable() }

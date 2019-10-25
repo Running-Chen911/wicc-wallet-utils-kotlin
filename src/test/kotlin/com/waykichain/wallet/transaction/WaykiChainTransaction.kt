@@ -21,10 +21,9 @@ class WaykiChainTransaction {
 
     @Test
     fun getAccountInfo() {
-        val address=AddressBean("wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4")
-        baasClient?.getAccountInfo(address)?.mSubscribe { it ->
-            logger.info(it.toString())
-        }
+        val address="wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4"
+        val accountInfo=  baasClient?.getAccountInfo(address)
+        logger.info(accountInfo.toString())
     }
 
     /*
