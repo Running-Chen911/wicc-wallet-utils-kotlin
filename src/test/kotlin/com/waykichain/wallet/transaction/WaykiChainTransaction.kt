@@ -16,12 +16,12 @@ class WaykiChainTransaction {
 
     @Before
     fun setup() {
-        baasClient = ApiClientFactory.instance.newTestNetBaasClient()
+        baasClient = ApiClientFactory.instance.newMainNetBaasClient()
     }
 
     @Test
     fun getAccountInfo() {
-        val address="wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4"
+        val address="WkMhG5aLEexLUFv7AWzhuFQ1FQxyFtpEQr"
         val accountInfo=  baasClient?.getAccountInfo(address)
         logger.info(accountInfo.toString())
     }

@@ -73,4 +73,15 @@ class TestWallet {
         assert("wZCst8wFgxiaNptqhheMvRugdngMJMZAKL".equals(wallet.address))
         logger.info(wallet.toString())
     }
+
+    @Test
+    fun checkWalletAddress(){
+        val netParams = WaykiTestNetParams.instance //网络类型 （WaykiMainNetParams.instance 正式网）
+        val address="wZCst8wFgxiaNptqhheMvRugdngMJMZAKL" //维基钱包地址
+        try {
+         val legacyAddress= LegacyAddress.fromBase58(netParams,address) //地址检测
+        }catch (e:Exception){
+          e.printStackTrace()
+        }
+    }
 }

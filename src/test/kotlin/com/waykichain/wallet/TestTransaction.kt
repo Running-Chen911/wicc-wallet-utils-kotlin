@@ -165,7 +165,7 @@ class TestTransaction {
     @Test
     fun testGenerateUCoinContractTx() {
         val wallet = LegacyWallet()
-        val netParams = WaykiTestNetParams.instance
+        val netParams = WaykiMainNetParams.instance
 
         val srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13"
         val srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).key
