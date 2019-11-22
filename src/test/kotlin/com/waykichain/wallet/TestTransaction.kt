@@ -165,18 +165,18 @@ class TestTransaction {
     @Test
     fun testGenerateUCoinContractTx() {
         val wallet = LegacyWallet()
-        val netParams = WaykiMainNetParams.instance
+        val netParams = WaykiTestNetParams.instance
 
-        val srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13"
+        val srcPrivKeyWiF = "Y9EpcPMEKS25irdPmEq55LfGmqD7eRKz45gq39ACFYDXJkqBdkdd"//"Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13"
         val srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).key
         logger.info(LegacyAddress.fromPubKeyHash(netParams, srcKey.pubKeyHash).toString())
 
-        val value = 100000000L
-        val appid = "450687-1"
-        val contractByte = ContractUtil.hexString2binaryString("f001")
-        val txParams = WaykiUCoinContractTxParams(srcKey.publicKeyAsHex, 727702,
-                1000000, value, "0-1",
-                appid, contractByte, CoinType.WICC.type, CoinType.WUSD.type)
+        val value = 1000000000L
+        val appid = "392366-3"
+        val contractByte = ContractUtil.hexString2binaryString("f021000077614d4c5858726b7739346870586d5976656d54456f346f397a73435466456f794b313537343339333738313133386a416a36483030303030303030303030303066336600ca9a3b000000000000000000000000000000000000000000000000000000006400000003000000000000000057322e313500000000000000000000000044332e34300000000000000000000000004c332e323500000000")
+        val txParams = WaykiUCoinContractTxParams(srcKey.publicKeyAsHex, 1183357,
+                1000000, value, "410434-2",
+                appid, contractByte, CoinType.WUSD.type, CoinType.WUSD.type)
         txParams.signTx(srcKey)
         val tx = wallet.createUCoinContractInvokeRaw(txParams)
         logger.info(tx)

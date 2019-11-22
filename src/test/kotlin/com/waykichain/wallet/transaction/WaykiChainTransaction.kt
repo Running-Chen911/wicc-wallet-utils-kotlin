@@ -23,7 +23,6 @@ class WaykiChainTransaction {
     fun getAccountInfo() {
         val address="WkMhG5aLEexLUFv7AWzhuFQ1FQxyFtpEQr"
         val accountInfo=  baasClient?.getAccountInfo(address)
-        logger.info(accountInfo.toString())
     }
 
     /*

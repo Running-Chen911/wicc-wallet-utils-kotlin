@@ -1,13 +1,10 @@
 package com.waykichain.wallet.client.impl
 
-import com.waykichain.wallet.client.ApiClientFactory
 import com.waykichain.wallet.client.BaasClient
 import com.waykichain.wallet.client.BaasRetrofit
-import com.waykichain.wallet.client.api.BaasApiServce
 import com.waykichain.wallet.client.mSubscribe
 import com.waykichain.wallet.model.baas.AccointInfo
 import com.waykichain.wallet.model.baas.parameter.AddressBean
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
 
