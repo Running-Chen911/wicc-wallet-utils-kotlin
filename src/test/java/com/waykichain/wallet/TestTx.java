@@ -1,3 +1,4 @@
+/*
 package com.waykichain.wallet;
 
 import com.waykichain.wallet.encode.UCoinDest;
@@ -22,33 +23,41 @@ import java.util.List;
 public class TestTx {
     private Logger logger = LoggerFactory.getLogger(TestTx.class);
 
-    /*
+    */
+/*
     * 生成助记词
     * generate Mnemonic
-    * */
+    * *//*
+
     @Test
     public void generateMnemonic(){
       List<String> words=MnemonicUtil.Companion.randomMnemonicCodes();
       logger.info(words.toString());
     }
 
-    /*
+    */
+/*
     * 生成钱包
     * generate wicc Wallet
-    * */
+    * *//*
+
     @Test
     public void generateWalletFromMnemonic(){
-       /* String words = "vote despair mind rescue crumble choice garden elite venture cattle oxygen voyage";
+       */
+/* String words = "vote despair mind rescue crumble choice garden elite venture cattle oxygen voyage";
         WaykiTestNetParams networkParameters = WaykiTestNetParams.Companion.getInstance(); //generate Testnet Address From Mnemonic
        // WaykiMainNetParams networkParameters = WaykiMainNetParams.Companion.getInstance(); //generate Mainnet Address From Mnemonic
         BIP44Util.WaykiWallet wallet= BIP44Util.Companion.generateWaykiWallet(words,networkParameters);
-        logger.info("PrivateKey:"+wallet.getPrivateKey()+"\n"+"Address:"+wallet.getAddress()+"\n"+"PublicKeyKey:"+wallet.getPubKey()+"\n");*/
+        logger.info("PrivateKey:"+wallet.getPrivateKey()+"\n"+"Address:"+wallet.getAddress()+"\n"+"PublicKeyKey:"+wallet.getPubKey()+"\n");*//*
+
     }
 
-    /*
+    */
+/*
     * WICC转账
     * 小费最少0.0001WICC   fee Minimum 0.0001 wicc
-    * */
+    * *//*
+
     @Test
     public void commonTransaction(){
         LegacyWallet wallet =new LegacyWallet();
@@ -65,11 +74,13 @@ public class TestTx {
         logger.info("生成交易Hex:"+tx);
     }
 
-    /*
+    */
+/*
      * 多币种转账交易 ,支持多种币种转账
      * Test nUniversal Coin Transfer Tx
      * fee Minimum 0.0001 wicc
-     * */
+     * *//*
+
     @Test
     public void  testGenerateUCoinTransferTx() {
         LegacyWallet wallet = new LegacyWallet();
@@ -96,11 +107,13 @@ public class TestTx {
         logger.info("生成交易Hex:"+tx);
     }
 
-    /*
+    */
+/*
      * 多币种合约调用交易
      * Contract transaction sample
      * fee Minimum 0.0001 wicc
-     * */
+     * *//*
+
     @Test
     public void testGenerateUCoinContractTx() {
         LegacyWallet wallet = new LegacyWallet();
@@ -122,3 +135,4 @@ public class TestTx {
     }
 
 }
+*/

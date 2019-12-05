@@ -20,6 +20,7 @@ import com.waykichain.wallet.transaction.AssetUpdateData
 import com.waykichain.wallet.util.longToBytes
 import com.waykichain.wallet.util.unLongToIntByteArray
 import com.waykichain.wallet.util.unLongToShortByteArray
+import org.bitcoinj.core.Base58
 import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.VarInt
 import java.io.ByteArrayOutputStream
@@ -30,7 +31,7 @@ class HashWriter : ByteArrayOutputStream() {
     fun add(data: String?): HashWriter {
         if (data != null) {
             val arr = data.toByteArray()
-            this.write(VarInt(arr.size.toLong()).encodeInOldWay())
+            this.writeCompactSize(arr.size.toLong())
             this.write(data.toByteArray())
         }
         return this
@@ -39,6 +40,13 @@ class HashWriter : ByteArrayOutputStream() {
     fun add(data: ByteArray?): HashWriter {
         if (data != null)
             this.write(data)
+        return this
+    }
+
+    fun writeAddress(address:String): HashWriter {
+       val addHash=Base58.decodeChecked(address)
+       this.writeCompactSize(addHash.size.toLong())
+        this.write(addHash)
         return this
     }
 
@@ -53,7 +61,7 @@ class HashWriter : ByteArrayOutputStream() {
 
     /** Vote: "$voteType-$pubKey-$votes" */
     fun add(operVoteFund: Array<OperVoteFund>): HashWriter {
-        this.write(VarInt(operVoteFund.size.toLong()).encodeInOldWay())
+        this.writeCompactSize(operVoteFund.size.toLong())
         for (oper in operVoteFund) {
             this.write(VarInt(oper.voteType.toLong()).encodeInOldWay())
             this.write(VarInt(33).encodeInOldWay())
@@ -136,7 +144,7 @@ class HashWriter : ByteArrayOutputStream() {
         return this
     }
 
-    fun writeCompactSize(len: Long) {
+    fun writeCompactSize(len: Long) : HashWriter{
         if (len < 253) {
             val arr = ByteArray(1)
             arr[0] = len.toByte()
@@ -158,6 +166,7 @@ class HashWriter : ByteArrayOutputStream() {
             val arr2 = len.longToBytes()
             this.write(arr2)
         }
+        return this
     }
 
     fun parseRegId(regId: String): WaykiRegId? {
@@ -185,7 +194,7 @@ class HashWriter : ByteArrayOutputStream() {
         this.write(VarInt(dests.size.toLong()).encodeInOldWay())
         for (dest in dests) {
             val aa=dest.destAddress.hash
-            this.write(VarInt(aa.size.toLong()).encodeInOldWay())
+            this.writeCompactSize(aa.size.toLong())
             this.write(dest.destAddress.hash)
             this.add(dest.coinSymbol)
             this.write(VarInt(dest.transferAmount).encodeInOldWay())

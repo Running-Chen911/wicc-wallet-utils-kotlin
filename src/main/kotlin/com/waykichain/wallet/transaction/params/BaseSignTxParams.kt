@@ -20,16 +20,10 @@ import com.waykichain.wallet.transaction.CoinType
 import com.waykichain.wallet.transaction.WaykiTxType
 import org.bitcoinj.core.ECKey
 
-abstract class BaseSignTxParams(var feeSymbol: String= CoinType.WICC.type,
-                                var userPubKey: String?,
-                                var minerPubKey: ByteArray?,
-                                var nValidHeight: Long = 0,
-                                var fees: Long = 10000L, // 0.0001 wicc
+abstract class BaseSignTxParams(var nValidHeight: Long = 0,
+                                var fees: Long = 10000L,
                                 var nTxType: WaykiTxType = WaykiTxType.TX_NONE,
                                 var nVersion: Long = 1) {
-    abstract fun getSignatureHash():  ByteArray
-    abstract fun signTx(key: ECKey): ByteArray
-    abstract fun serializeTx(): String
-
-    var signature: ByteArray? = null
+    abstract fun getSignatureHash(pubKey:String?):  ByteArray
+    abstract fun serializeTx(signature:ByteArray): String
 }

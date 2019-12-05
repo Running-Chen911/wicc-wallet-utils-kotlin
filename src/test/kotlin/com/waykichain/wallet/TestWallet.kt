@@ -17,19 +17,13 @@
 
 package com.waykichain.wallet
 
-import com.waykichain.wallet.encode.WaykiRegId
-import com.waykichain.wallet.encode.encodeInOldWay
-import com.waykichain.wallet.transaction.params.WaykiMainNetParams
+import com.waykichain.wallet.transaction.Language
+import com.waykichain.wallet.transaction.NetWorkType
 import com.waykichain.wallet.transaction.params.WaykiTestNetParams
-import com.waykichain.wallet.util.BIP44Path
 import org.bitcoinj.core.*
-import org.bitcoinj.wallet.DeterministicKeyChain
-import org.bitcoinj.wallet.DeterministicSeed
+import org.junit.Before
 import org.junit.Test
 import org.slf4j.LoggerFactory
-import org.waykichain.wallet.util.MnemonicUtil
-import java.io.ByteArrayOutputStream
-import java.util.*
 
 
 /**
@@ -40,14 +34,19 @@ import java.util.*
 class TestWallet {
 
     private val logger = LoggerFactory.getLogger(javaClass)
+    private var walletManager:WalletManager?=null
+
+    @Before
+    fun setup(){
+        walletManager=WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET)
+    }
 
     /*
     * 生成助记词 generate Mnemonic
     * */
     @Test
     fun generateMnemonic() {
-        var words: List<String>
-        words = MnemonicUtil.randomMnemonicCodes()
+       var words= walletManager?.randomMnemonic(Language.CHINESE)
         logger.info(words.toString())
     }
 
@@ -58,8 +57,8 @@ class TestWallet {
     fun generateWalletFromMnemonic() {
         val mn = "wreck wheat chunk fiber maze opera recipe must glory empower summer bind"
         val words = mn.split(" ")
-        val wallet = WalletManager.importWalletFromMnemonic(words, ChainIds.WAYKICHAIN_MAINNET)
-        assert("WjeEKvXWDJyChChcCmU4USYKTrYrGmEXUR".equals(wallet.address))
+        val wallet = walletManager?.importWalletFromMnemonic(words)
+        assert("WjeEKvXWDJyChChcCmU4USYKTrYrGmEXUR".equals(wallet?.address))
         logger.info(wallet.toString())
     }
 
@@ -69,8 +68,8 @@ class TestWallet {
     @Test
     fun testImportPrivKey() {
         val privKeyWiF = "Y7UiVRpTAZNDtZakSHZwebHD6romu9jcuj1tjjujzwbSqdKLCEQZ"//"YBb6tdJvQyD8VwxJ4HUjDfpcpmFc359uGFQLbegaaKr6FJY863iw"//"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
-        val wallet = WalletManager.importWalletFromPrivateKey(privKeyWiF, ChainIds.WAYKICHAIN_TESTNET)
-        assert("wZCst8wFgxiaNptqhheMvRugdngMJMZAKL".equals(wallet.address))
+        val wallet = walletManager?.importWalletFromPrivateKey(privKeyWiF)
+        assert("wZCst8wFgxiaNptqhheMvRugdngMJMZAKL".equals(wallet?.address))
         logger.info(wallet.toString())
     }
 

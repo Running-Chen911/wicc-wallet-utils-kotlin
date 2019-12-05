@@ -1,7 +1,7 @@
+/*
 package com.waykichain.wallet
 
 import com.waykichain.wallet.encode.OperVoteFund
-import com.waykichain.wallet.transaction.LegacyWallet
 import com.waykichain.wallet.transaction.VoteOperType
 import com.waykichain.wallet.transaction.params.WaykiDelegateTxParams
 import com.waykichain.wallet.util.BIP44Path
@@ -99,4 +99,4 @@ class RunWallet {
         }
         return digit
     }
-}
+}*/

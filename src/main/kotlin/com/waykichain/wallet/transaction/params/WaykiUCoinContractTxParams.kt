@@ -24,16 +24,17 @@ import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
 
-class WaykiUCoinContractTxParams(userPubKey: String, nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,
-                            val destRegId: String, val vContract: ByteArray?,feeSymbol:String,val coinSymbol:String):
-        BaseSignTxParams(feeSymbol,userPubKey, null, nValidHeight, fees, WaykiTxType.UCONTRACT_INVOKE_TX, 1) {
-    override fun getSignatureHash(): ByteArray {
+class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,
+                            val destRegId: String, val vContract: ByteArray?,var feeSymbol:String,val coinSymbol:String):
+        BaseSignTxParams( nValidHeight, fees, WaykiTxType.UCONTRACT_INVOKE_TX, 1) {
+    private var userPubKey:ByteArray?=null
+    override fun getSignatureHash(pubKey:String?): ByteArray {
+        this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
-        val publicKey= Utils.HEX.decode(userPubKey)
         ss.write(VarInt(nVersion).encodeInOldWay())
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
         ss.write(VarInt(nValidHeight).encodeInOldWay())
-        ss.writeUserId(srcRegId,publicKey)
+        ss.writeUserId(srcRegId,userPubKey)
         ss.writeRegId(destRegId)
         ss.writeCompactSize(vContract!!.size.toLong())//VarInt(vContract!!.size.toLong()).encodeInOldWay())
         ss.write(vContract)
@@ -43,29 +44,17 @@ class WaykiUCoinContractTxParams(userPubKey: String, nValidHeight: Long, fees: L
         ss.write(VarInt(value).encodeInOldWay())
 
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
-        val hashStr = Utils.HEX.encode(hash)
-        System.out.println("hash: $hashStr")
-
         return hash
     }
 
-    override fun signTx(key: ECKey): ByteArray {
-        val sigHash = this.getSignatureHash()
-        val ecSig = key.sign(Sha256Hash.wrap(sigHash))
-        signature =  ecSig.encodeToDER()
-        return signature!!
-    }
-
-    override fun serializeTx(): String {
-        assert (signature != null)
+    override fun serializeTx(signature:ByteArray): String {
         val ss = HashWriter()
-        val publicKey= Utils.HEX.decode(userPubKey)
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
         ss.write(VarInt(nVersion).encodeInOldWay())
         ss.write(VarInt(nValidHeight).encodeInOldWay())
-        ss.writeUserId(srcRegId,publicKey)
+        ss.writeUserId(srcRegId,userPubKey)
         ss.writeRegId(destRegId)
-        ss.writeCompactSize(vContract!!.size.toLong())//write(VarInt(vContract!!.size.toLong()).encodeInOldWay())
+        ss.writeCompactSize(vContract!!.size.toLong())
         ss.write(vContract)
         ss.write(VarInt(fees).encodeInOldWay())
         ss.add(feeSymbol)

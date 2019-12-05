@@ -1,3 +1,4 @@
+/*
 package com.waykichain.wallet
 
 import com.waykichain.wallet.encode.CAsset
@@ -18,11 +19,13 @@ import java.io.File
 
 class TestTransaction {
     private val logger = LoggerFactory.getLogger(javaClass)
-    /*
+    */
+/*
     * 账户注册交易,新版本已基本废弃，可改用公钥注册，免注册费用
     * Account registration transaction, the new version has been abandoned, you can use public key registration, free registration fee
      * fee Minimum 0.1 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateRegisterAccountTxForTestNet() {
         val wallet = LegacyWallet()
@@ -32,18 +35,20 @@ class TestTransaction {
         val key = DumpedPrivateKey.fromBase58(netParams, privKeyWiF).key
         logger.info("            ${key.publicKeyAsHex}")
 
-        val txParams = WaykiRegisterAccountTxParams(key.publicKeyAsHex, null, 429821, 10000000, CoinType.WICC.type)
+        val txParams = WaykiRegisterAccountTxParams(429821, 10000000)
         txParams.signTx(key)
         val tx = wallet.createRegisterTransactionRaw(txParams)
         logger.info("${tx.length} - $tx")
 
     }
 
-    /*
+    */
+/*
     * 测试网转账交易
     * Test network transfer
     * fee Minimum 0.1 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateCommonTxForTestNet() {
         val wallet = LegacyWallet()
@@ -61,11 +66,13 @@ class TestTransaction {
         logger.info("${tx.length} - $tx")
     }
 
-    /*
+    */
+/*
     * 主网转账交易
     * Main network transfer
     * fee Minimum 0.1 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateCommonTxForMainNet() {
         val wallet = LegacyWallet()
@@ -91,11 +98,13 @@ class TestTransaction {
     }
 
 
-    /*
+    */
+/*
    * 多币种转账交易 ,支持多种币种转账
    * Test nUniversal Coin Transfer Tx
    * fee Minimum 0.01 wicc
-   * */
+   * *//*
+
     @Test
     fun testGenerateUCoinTransferTx() {
         val wallet = LegacyWallet()
@@ -122,11 +131,13 @@ class TestTransaction {
         logger.info("$tx")
     }
 
-    /*
+    */
+/*
     * 投票交易
     * Voting transaction
     * fee Minimum 0.01 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateDelegateTx() {
         val wallet = LegacyWallet()
@@ -157,11 +168,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
     * 多币种合约调用交易
     * Contract transaction sample
     * fee Minimum 0.01 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateUCoinContractTx() {
         val wallet = LegacyWallet()
@@ -182,11 +195,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
     * 合约调用交易
     * Contract transaction sample
     * fee Minimum 0.01 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateContractTx() {
         //WRC20 Transfer
@@ -206,11 +221,13 @@ class TestTransaction {
     }
 
 
-    /*
+    */
+/*
     * 创建,追加cdp交易
     * Create or append an  cdp transaction
     * fee Minimum 0.01 wicc
-    * */
+    * *//*
+
     @Test
     fun testGenerateCdpStakeTx() {
         val nValidHeight = 5003L
@@ -236,11 +253,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
    * 赎回cdp交易
    * Redeem cdp transaction
    * fee Minimum 0.01 wicc
-   * */
+   * *//*
+
     @Test
     fun testRedeemCdpTx() {
         val nValidHeight = 8510L
@@ -265,11 +284,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
    * 清算cdp交易
    * Liquidate cdp transaction
    * fee Minimum 0.01 wicc
-   * */
+   * *//*
+
     @Test
     fun testLiquidateCdpTx() {
         val nValidHeight = 283308L
@@ -291,11 +312,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
   * Dex 限价买单交易
   * Dex limit price transaction
   * fee Minimum 0.001 wicc
-  * */
+  * *//*
+
     @Test
     fun testDexBuyLimitTx() {
         val nValidHeight = 283308L
@@ -320,11 +343,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
     * Dex 限价卖单交易
     * Dex limit sell price transaction
     * fee Minimum 0.001 wicc
-   * */
+   * *//*
+
     @Test
     fun testDexSellLimitTx() {
         val nValidHeight = 283308L
@@ -349,11 +374,13 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
      *  Dex 市价买单交易
      * Dex market buy price transaction
      * fee Minimum 0.001 wicc
-    * */
+    * *//*
+
     @Test
     fun testDexMarketBuyLimitTx() {
         val nValidHeight = 283308L
@@ -378,11 +405,13 @@ class TestTransaction {
     }
 
 
-    /*
+    */
+/*
      *  Dex 市价卖单交易
      * Dex market sell price transaction
      * fee Minimum 0.001 wicc
-    * */
+    * *//*
+
     @Test
     fun testDexMarketSellLimitTx() {
         val nValidHeight = 283308L
@@ -407,11 +436,13 @@ class TestTransaction {
     }
 
 
-    /*
+    */
+/*
     *  Dex 取消挂单交易
     * Dex cancel order tx
     * fee Minimum 0.001 wicc
-   * */
+   * *//*
+
     @Test
     fun testDexCancelOrderTx() {
         val nValidHeight = 283308L
@@ -433,14 +464,16 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
     * 资产发布
     * Asset release
     * symbol 大写字母A-Z 1-7 位 [A_Z]
     * Symbol Capital letter A-Z 1-7 digits [A_Z]
     * fee Minimum 0.01 wicc
     * account - 550 wicc
-    * */
+    * *//*
+
     @Test
     fun testCAssetIssueTx(){
         val nValidHeight = 11375L
@@ -460,14 +493,16 @@ class TestTransaction {
         logger.info(tx)
     }
 
-    /*
+    */
+/*
    * 资产发布
    * Asset Update
    * asset_symbol 大写字母A-Z 1-7 位 [A_Z]
    * Symbol Capital letter A-Z 1-7 digits [A_Z]
    * fee Minimum 0.01 wicc
    * account - 110 wicc
-   * */
+   * *//*
+
     @Test
     fun testCAssetUpdateTx(){
         val nValidHeight = 11443L
@@ -491,11 +526,13 @@ class TestTransaction {
     }
 
 
-    /*
+    */
+/*
    * 合约发布交易
    * Deploy Contract transaction sample
    * fee Minimum 1.1 wicc
-   * */
+   * *//*
+
     @Test
     fun testDeployContractTx() {
         val wallet = LegacyWallet()
@@ -513,4 +550,4 @@ class TestTransaction {
         logger.info(tx)
     }
 
-}
+}*/

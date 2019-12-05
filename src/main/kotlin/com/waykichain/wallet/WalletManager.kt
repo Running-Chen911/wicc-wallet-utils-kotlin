@@ -1,44 +1,109 @@
 package com.waykichain.wallet
 
+import com.google.common.collect.ImmutableList
+import com.waykichain.wallet.transaction.Language
+import com.waykichain.wallet.transaction.NetWorkType
 import com.waykichain.wallet.transaction.params.WaykiMainNetParams
 import com.waykichain.wallet.transaction.params.WaykiTestNetParams
 import com.waykichain.wallet.util.BIP44Path
+import com.waykichain.wallet.util.WaykiMnemonicCode
 import org.bitcoinj.core.DumpedPrivateKey
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.NetworkParameters
+import org.bitcoinj.crypto.ChildNumber
+import org.bitcoinj.crypto.MnemonicCode
 import org.bitcoinj.wallet.DeterministicKeyChain
 import org.bitcoinj.wallet.DeterministicSeed
 import org.waykichain.wallet.util.Messages
-import org.waykichain.wallet.util.MnemonicUtil
 import org.waykichain.wallet.util.TokenException
+import java.security.SecureRandom
+import java.util.ArrayList
 
 class WalletManager {
 
+
     companion object {
-        var networkParameters: NetworkParameters? = null
-        fun importWalletFromMnemonic(mnemonics: List<String>, networkType: Int): Wallet{
-            MnemonicUtil.validateMnemonics(mnemonics)
-            if (networkType !== 1&&networkType !== 2) throw TokenException(Messages.INVALID_NETWORK_TYPE)
-            if (ChainIds.WAYKICHAIN_MAINNET == networkType) networkParameters = WaykiMainNetParams.instance else networkParameters = WaykiTestNetParams.instance
-            val seed = DeterministicSeed(mnemonics, null, "", 0L)
-            val keyChain = DeterministicKeyChain.builder().seed(seed).build()
-            val mainKey = keyChain.getKeyByPath(MnemonicUtil.generatePath(BIP44Path.WAYKICHAIN_WALLET_PATH), true)
-            val address = LegacyAddress.fromPubKeyHash(networkParameters, mainKey.pubKeyHash).toString()
-            val ecKey = ECKey.fromPrivate(mainKey.privKey)
-            val privateKey = ecKey.getPrivateKeyAsWiF(networkParameters)
-            val wallet = Wallet(ecKey, privateKey, address)
-            return wallet
+        private  var network: NetworkParameters? = null
+        private var instance: WalletManager? = null
+            get() {
+                if (field == null) {
+                    field = WalletManager()
+                }
+                return field
+            }
+        @Synchronized
+        fun init(networkType: NetWorkType): WalletManager{
+            val type=networkType.type
+            if (type != 1&&type != 2) throw TokenException(Messages.INVALID_NETWORK_TYPE)
+            network =  if (NetWorkType.WAYKICHAIN_MAINNET.type == type)  WaykiMainNetParams.instance else WaykiTestNetParams.instance
+            return instance!!
         }
 
-         fun importWalletFromPrivateKey(privKeyWiF: String, networkType: Int): Wallet {
-             if (networkType !== 1&&networkType !== 2) throw TokenException(Messages.INVALID_NETWORK_TYPE)
-             if (ChainIds.WAYKICHAIN_MAINNET == networkType) networkParameters = WaykiMainNetParams.instance else networkParameters = WaykiTestNetParams.instance
-             val ecKey = DumpedPrivateKey.fromBase58(networkParameters, privKeyWiF).key
-             val address = LegacyAddress.fromPubKeyHash(networkParameters, ecKey.pubKeyHash).toString()
-             val wallet = Wallet(ecKey, privKeyWiF, address)
-             return wallet
-         }
+    }
+
+    fun randomMnemonic(lang: Language):List<String>{
+        return randomMnemonicCodes(lang)
+    }
+
+    fun importWalletFromMnemonic(mnemonics: List<String>): Wallet{
+        validateMnemonics(mnemonics)
+        val seed = DeterministicSeed(mnemonics, null, "", 0L)
+        val keyChain = DeterministicKeyChain.builder().seed(seed).build()
+        val mainKey = keyChain.getKeyByPath(generatePath(BIP44Path.WAYKICHAIN_WALLET_PATH), true)
+        val address = LegacyAddress.fromPubKeyHash(network, mainKey.pubKeyHash).toString()
+        val ecKey = ECKey.fromPrivate(mainKey.privKey)
+        val privateKey = ecKey.getPrivateKeyAsWiF(network)
+        val wallet = Wallet(ecKey, privateKey, address)
+        return wallet
+    }
+
+    fun importWalletFromPrivateKey(privKeyWiF: String): Wallet {
+        val ecKey = DumpedPrivateKey.fromBase58(network, privKeyWiF).key
+        val address = LegacyAddress.fromPubKeyHash(network, ecKey.pubKeyHash).toString()
+        val wallet = Wallet(ecKey, privKeyWiF, address)
+        return wallet
+    }
+
+    private  fun validateMnemonics(mnemonicCodes: List<String>) {
+        try {
+            MnemonicCode.INSTANCE.check(mnemonicCodes)
+        } catch (e: org.bitcoinj.crypto.MnemonicException.MnemonicLengthException) {
+            throw TokenException(Messages.MNEMONIC_INVALID_LENGTH)
+        } catch (e: org.bitcoinj.crypto.MnemonicException.MnemonicWordException) {
+            throw TokenException(Messages.MNEMONIC_BAD_WORD)
+        } catch (e: Exception) {
+            throw TokenException(Messages.MNEMONIC_INVALID_CHECKSUM)
+        }
+    }
+
+    private fun randomMnemonicCodes(lang: Language): List<String> {
+        return toMnemonicCodes(lang)
+    }
+
+    private fun toMnemonicCodes(lang: Language): List<String> {
+        try {
+            return WaykiMnemonicCode.create(lang).generateMnemonic()
+        } catch (e: org.bitcoinj.crypto.MnemonicException.MnemonicLengthException) {
+            throw TokenException(Messages.MNEMONIC_INVALID_LENGTH)
+        } catch (e: Exception) {
+            throw TokenException(Messages.MNEMONIC_INVALID_CHECKSUM)
+        }
+    }
+
+    private fun generatePath(path: String): ImmutableList<ChildNumber> {
+        val list = ArrayList<ChildNumber>()
+        for (p in path.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+            if ("m".equals(p, ignoreCase = true) || "" == p.trim { it <= ' ' }) {
+                continue
+            } else if (p[p.length - 1] == '\'') {
+                list.add(ChildNumber(Integer.parseInt(p.substring(0, p.length - 1)), true))
+            } else {
+                list.add(ChildNumber(Integer.parseInt(p), false))
+            }
+        }
+        val builder = ImmutableList.builder<ChildNumber>()
+        return builder.addAll(list).build()
     }
 
 }

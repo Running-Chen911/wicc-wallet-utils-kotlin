@@ -26,8 +26,10 @@ import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
 
 class WaykiDeployContractTxParams( nValidHeight: Long, fees: Long, val srcRegId: String, val vContract: ByteArray?,val description:String):
-        BaseSignTxParams(CoinType.WICC.type,null, null, nValidHeight, fees, WaykiTxType.LCONTRACT_DEPLOY_TX, 1) {
-    override fun getSignatureHash(): ByteArray {
+        BaseSignTxParams( nValidHeight, fees, WaykiTxType.LCONTRACT_DEPLOY_TX, 1) {
+    private var userPubKey:ByteArray?=null
+    override fun getSignatureHash(pubKey:String?): ByteArray {
+        this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
         ss.write(VarInt(nVersion).encodeInOldWay())
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
@@ -36,21 +38,10 @@ class WaykiDeployContractTxParams( nValidHeight: Long, fees: Long, val srcRegId:
         ss.writeScript(vContract!!,description)
         ss.write(VarInt(fees).encodeInOldWay())
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
-        val hashStr = Utils.HEX.encode(hash)
-
-        System.out.println("hash: $hashStr")
         return hash
     }
 
-    override fun signTx(key: ECKey): ByteArray {
-        val sigHash = this.getSignatureHash()
-        val ecSig = key.sign(Sha256Hash.wrap(sigHash))
-        signature =  ecSig.encodeToDER()//NativeSecp256k1.sign(sigHash, key.privKeyBytes)
-        return signature!!
-    }
-
-    override fun serializeTx(): String {
-        assert (signature != null)
+    override fun serializeTx(signature:ByteArray): String {
         val ss = HashWriter()
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
         ss.write(VarInt(nVersion).encodeInOldWay())

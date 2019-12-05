@@ -72,5 +72,15 @@ enum class AssetUpdateType(val type: Int) {
     MINT_AMOUNT(3)
 }
 
+enum class NetWorkType(val type: Int) {
+  WAYKICHAIN_MAINNET(1),
+  WAYKICHAIN_TESTNET(2)
+}
+
+enum class Language(val lang: String) {
+    ENGLISH("ENGLISH"),
+    CHINESE("CHINESE")
+}
+
 data class AssetUpdateData(var enumAsset: AssetUpdateType, var value: Any)
 

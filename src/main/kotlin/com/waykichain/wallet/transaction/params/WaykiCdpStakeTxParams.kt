@@ -14,23 +14,19 @@ import org.bitcoinj.core.VarInt
  * destAddr: 20-byte PubKeyHash
  * fee Minimum 0.001 wicc
  */
-class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L,
-                            val userId: String, userPubKey: String, var cdpTxid: String,
-                            feeSymbol: String, val assetMap:Map<String,Long>,val sCoinSymbol: String,
+class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L, val userId: String, var cdpTxid: String? = cdpHash,var feeSymbol: String, val assetMap:Map<String,Long>,val sCoinSymbol: String,
                            val sCoinToMint: Long) :
-        BaseSignTxParams(feeSymbol, userPubKey, null, nValidHeight, fees, WaykiTxType.TX_CDPSTAKE, 1) {
+        BaseSignTxParams(nValidHeight, fees, WaykiTxType.TX_CDPSTAKE, 1) {
 
-    override fun getSignatureHash(): ByteArray {
+    private var userPubKey:ByteArray?=null
+    override fun getSignatureHash(pubKey:String?): ByteArray {
+        this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
-       if(cdpTxid.isEmpty()) {
-           cdpTxid= cdpHash
-       }
         val cdpTxHex = Utils.HEX.decode(cdpTxid).reversedArray()
-        val pubKey = Utils.HEX.decode(userPubKey)
         ss.add(VarInt(nVersion).encodeInOldWay())
                 .add(nTxType.value)
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, pubKey)
+                .writeUserId(userId, userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(cdpTxHex)
@@ -39,32 +35,18 @@ class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L,
                 .add(sCoinSymbol)
                 .add(VarInt(sCoinToMint).encodeInOldWay())
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
-        val hashStr = Utils.HEX.encode(hash)
-        System.out.println("hash: $hashStr")
-
         return hash
     }
 
-    override fun signTx(key: ECKey): ByteArray {
-        val sigHash = this.getSignatureHash()
-        val ecSig = key.sign(Sha256Hash.wrap(sigHash))
-        signature = ecSig.encodeToDER()
-        return signature!!
-    }
-
-    override fun serializeTx(): String {
+    override fun serializeTx(signature:ByteArray): String {
         assert(signature != null)
         val sigSize = signature!!.size
-        if(cdpTxid.isEmpty()) {
-            cdpTxid= cdpHash
-        }
         val cdpTxHex = Utils.HEX.decode(cdpTxid).reversedArray()
-        val pubKey = Utils.HEX.decode(userPubKey)
         val ss = HashWriter()
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, pubKey)
+                .writeUserId(userId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(cdpTxHex)
@@ -72,7 +54,7 @@ class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L,
                 .addCdpAssets(assetMap)
                 .add(sCoinSymbol)
                 .add(VarInt(sCoinToMint).encodeInOldWay())
-                .add(VarInt(sigSize.toLong()).encodeInOldWay())
+                .writeCompactSize(sigSize.toLong())
                 .add(signature)
 
         val hexStr = Utils.HEX.encode(ss.toByteArray())

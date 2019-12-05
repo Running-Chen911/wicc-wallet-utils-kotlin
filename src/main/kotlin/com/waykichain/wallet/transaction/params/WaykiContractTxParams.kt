@@ -24,50 +24,39 @@ import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
 
-class WaykiContractTxParams(userPubKey: String, nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,
-                            val destRegId: String, val vContract: ByteArray?,feeSymbol:String):
-        BaseSignTxParams(feeSymbol,userPubKey, null, nValidHeight, fees, WaykiTxType.TX_CONTRACT, 1) {
-    override fun getSignatureHash(): ByteArray {
+class WaykiContractTxParams(nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,
+                            val destRegId: String, val vContract: ByteArray?):
+        BaseSignTxParams( nValidHeight, fees, WaykiTxType.TX_CONTRACT, 1) {
+    private var userPubKey:ByteArray?=null
+    override fun getSignatureHash(pubKey:String?): ByteArray {
+        this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
-        val publicKey= Utils.HEX.decode(userPubKey)
         ss.write(VarInt(nVersion).encodeInOldWay())
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
         ss.write(VarInt(nValidHeight).encodeInOldWay())
-        ss.writeUserId(srcRegId,publicKey)
+        ss.writeUserId(srcRegId,userPubKey)
         ss.writeRegId(destRegId)
         ss.write(VarInt(fees).encodeInOldWay())
         ss.write(VarInt(value).encodeInOldWay())
         ss.write(VarInt(vContract!!.size.toLong()).encodeInOldWay())
         ss.write(vContract)
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
-        val hashStr = Utils.HEX.encode(hash)
-        System.out.println("hash: $hashStr")
-
         return hash
     }
 
-    override fun signTx(key: ECKey): ByteArray {
-        val sigHash = this.getSignatureHash()
-        val ecSig = key.sign(Sha256Hash.wrap(sigHash))
-        signature =  ecSig.encodeToDER()//NativeSecp256k1.sign(sigHash, key.privKeyBytes)
-        return signature!!
-    }
-
-    override fun serializeTx(): String {
-        assert (signature != null)
+    override fun serializeTx(signature:ByteArray): String {
         val ss = HashWriter()
-        val publicKey= Utils.HEX.decode(userPubKey)
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
         ss.write(VarInt(nVersion).encodeInOldWay())
         ss.write(VarInt(nValidHeight).encodeInOldWay())
-        ss.writeUserId(srcRegId,publicKey)
+        ss.writeUserId(srcRegId,this.userPubKey)
         ss.writeRegId(destRegId)
         ss.write(VarInt(fees).encodeInOldWay())
         ss.write(VarInt(value).encodeInOldWay())
         ss.write(VarInt(vContract!!.size.toLong()).encodeInOldWay())
         ss.write(vContract)
         val sigSize = signature!!.size
-        ss.write(VarInt(sigSize.toLong()).encodeInOldWay())
+        ss.writeCompactSize(sigSize.toLong())
         ss.write(signature)
         val hexStr =  Utils.HEX.encode(ss.toByteArray())
         return hexStr
