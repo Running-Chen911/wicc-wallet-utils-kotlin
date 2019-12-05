@@ -2,9 +2,11 @@ package com.waykichain.wallet.model.baas
 
 import com.waykichain.wallet.model.baas.parameter.BaseBean
 
- class AccointInfo(code:Int, msg:String,val data: Data):BaseBean(code, msg)
+class BlockHeight(code:Int, msg:String,val data: Int):BaseBean(code, msg)
 
-data class Data(
+class AccointInfo(code:Int, msg:String,val data: AccointData):BaseBean(code, msg)
+
+data class AccointData(
     val address: String,
     val balance: String,
     val cdplist: List<Cdplist>,

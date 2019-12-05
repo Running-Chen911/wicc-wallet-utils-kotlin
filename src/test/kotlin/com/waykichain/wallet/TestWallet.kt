@@ -43,10 +43,11 @@ class TestWallet {
 
     /*
     * 生成助记词 generate Mnemonic
+    * Language.ENGLISH Language.CHINESE
     * */
     @Test
     fun generateMnemonic() {
-       var words= walletManager?.randomMnemonic(Language.CHINESE)
+       var words= walletManager?.randomMnemonic(Language.ENGLISH)
         logger.info(words.toString())
     }
 

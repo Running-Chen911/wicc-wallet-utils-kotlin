@@ -17,7 +17,7 @@ class WaykiChainTransaction {
 
     @Before
     fun setup() {
-        baasClient = ApiClientFactory.instance.newTestNetBaasClient()
+        baasClient = ApiClientFactory.instance.newMainNetBaasClient()
         wallet=WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET).importWalletFromPrivateKey("Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13")
     }
 
@@ -27,6 +27,13 @@ class WaykiChainTransaction {
         val accountInfo=  baasClient?.getAccountInfo(address)
         val redId=accountInfo?.data?.regid
         logger.info(redId)
+    }
+
+    @Test
+    fun getBlockHeight() {
+        val blockHeight=  baasClient?.getBlockHeight()
+        val height=blockHeight?.data
+        logger.info(height.toString())
     }
 
     /*

@@ -1,7 +1,7 @@
 package com.waykichain.wallet.base
 
-import com.waykichain.wallet.base.types.decode
-import com.waykichain.wallet.base.types.size
+import com.waykichain.wallet.encode.UCoinDest
+import com.waykichain.wallet.encode.decode
 import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.Utils
