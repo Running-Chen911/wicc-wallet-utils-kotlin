@@ -51,7 +51,7 @@ class WaykiCdpRedeemTxParams(nValidHeight: Long, fees: Long = 1000L,val userId: 
                 .add(VarInt(sCoinsToRepay).encodeInOldWay())
                 .add(VarInt(assetMap?.size.toLong()).encodeInOldWay())
                 .addCdpAssets(assetMap)
-                .add(VarInt(sigSize.toLong()).encodeInOldWay())
+                .writeCompactSize(sigSize.toLong())
                 .add(signature)
 
         val hexStr = Utils.HEX.encode(ss.toByteArray())

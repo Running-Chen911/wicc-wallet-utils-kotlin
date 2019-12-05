@@ -56,7 +56,7 @@ class WaykiCommonTxParams(nValidHeight: Long, fees: Long, val value: Long, val s
                 .add(VarInt(fees).encodeInOldWay())
                 .add(VarInt(value).encodeInOldWay())
                 .add(memo)
-                .add(VarInt(sigSize.toLong()).encodeInOldWay())
+                .writeCompactSize(sigSize.toLong())
                 .add(signature)
 
         val hexStr = Utils.HEX.encode(ss.toByteArray())
