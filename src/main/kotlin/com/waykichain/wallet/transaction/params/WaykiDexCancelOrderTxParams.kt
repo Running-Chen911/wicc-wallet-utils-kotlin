@@ -13,7 +13,7 @@ import org.bitcoinj.core.VarInt
  * destAddr: 20-byte PubKeyHash
  * fee Minimum 0.0001 wicc
  */
-class WaykiDexCancelOrderTxParams(nValidHeight: Long, fees: Long,val userId: String, userPubKey: String?, var feeSymbol: String,
+class WaykiDexCancelOrderTxParams(nValidHeight: Long, fees: Long,val srcRegId: String?,var feeSymbol: String,
                             val orderId: String) :
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.DEX_CANCEL_ORDER_TX, 1) {
 
@@ -25,7 +25,7 @@ class WaykiDexCancelOrderTxParams(nValidHeight: Long, fees: Long,val userId: Str
         ss.add(VarInt(nVersion).encodeInOldWay())
                 .add(nTxType.value)
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, userPubKey)
+                .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(orderIdByte)
@@ -40,7 +40,7 @@ class WaykiDexCancelOrderTxParams(nValidHeight: Long, fees: Long,val userId: Str
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, userPubKey)
+                .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(orderIdByte)

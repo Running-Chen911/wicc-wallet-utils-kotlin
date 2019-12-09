@@ -38,7 +38,7 @@ class TestWallet {
 
     @Before
     fun setup(){
-        walletManager=WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET)
+        walletManager=WalletManager.init(NetWorkType.WAYKICHAIN_MAINNET)
     }
 
     /*
@@ -47,7 +47,7 @@ class TestWallet {
     * */
     @Test
     fun generateMnemonic() {
-       var words= walletManager?.randomMnemonic(Language.ENGLISH)
+       var words= walletManager?.randomMnemonic(Language.CHINESE)
         logger.info(words.toString())
     }
 

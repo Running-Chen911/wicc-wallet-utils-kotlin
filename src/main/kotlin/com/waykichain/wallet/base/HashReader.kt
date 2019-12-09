@@ -61,7 +61,7 @@ class HashReader(buf: ByteArray) : ByteArrayInputStream(buf) {
             val addr  = LegacyAddress.fromPubKeyHash(params, array)
             val coinSymbol = this.readString()
             val transferAmount = this.readVarInt().value
-            dests.add(UCoinDest(addr, coinSymbol, transferAmount))
+            dests.add(UCoinDest(addr.toBase58(), coinSymbol, transferAmount))
         }
     }
 

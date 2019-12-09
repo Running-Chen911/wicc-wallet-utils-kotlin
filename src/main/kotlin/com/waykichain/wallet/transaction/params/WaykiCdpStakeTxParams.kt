@@ -14,7 +14,7 @@ import org.bitcoinj.core.VarInt
  * destAddr: 20-byte PubKeyHash
  * fee Minimum 0.001 wicc
  */
-class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L, val userId: String, var cdpTxid: String? = cdpHash,var feeSymbol: String, val assetMap:Map<String,Long>,val sCoinSymbol: String,
+class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long, val srcRegId: String?, var cdpTxid: String?,var feeSymbol: String, val assetMap:Map<String,Long>,val sCoinSymbol: String,
                            val sCoinToMint: Long) :
         BaseSignTxParams(nValidHeight, fees, WaykiTxType.TX_CDPSTAKE, 1) {
 
@@ -22,15 +22,15 @@ class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L, val userId: 
     override fun getSignatureHash(pubKey:String?): ByteArray {
         this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
-        val cdpTxHex = Utils.HEX.decode(cdpTxid).reversedArray()
+        val cdpTxHex = if(!cdpTxid.isNullOrBlank()) Utils.HEX.decode(cdpTxid).reversedArray() else Utils.HEX.decode(cdpHash)
         ss.add(VarInt(nVersion).encodeInOldWay())
                 .add(nTxType.value)
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, userPubKey)
+                .writeUserId(srcRegId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(cdpTxHex)
-                .add(VarInt(assetMap?.size.toLong()).encodeInOldWay())
+                .writeCompactSize(assetMap?.size.toLong())
                 .addCdpAssets(assetMap)
                 .add(sCoinSymbol)
                 .add(VarInt(sCoinToMint).encodeInOldWay())
@@ -39,18 +39,17 @@ class WaykiCdpStakeTxParams(nValidHeight: Long, fees: Long = 1000L, val userId: 
     }
 
     override fun serializeTx(signature:ByteArray): String {
-        assert(signature != null)
         val sigSize = signature!!.size
-        val cdpTxHex = Utils.HEX.decode(cdpTxid).reversedArray()
+        val cdpTxHex = if(!cdpTxid.isNullOrBlank()) Utils.HEX.decode(cdpTxid).reversedArray() else Utils.HEX.decode(cdpHash)
         val ss = HashWriter()
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, this.userPubKey)
+                .writeUserId(srcRegId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(cdpTxHex)
-                .add(VarInt(assetMap.size.toLong()).encodeInOldWay())
+                .writeCompactSize(assetMap.size.toLong())
                 .addCdpAssets(assetMap)
                 .add(sCoinSymbol)
                 .add(VarInt(sCoinToMint).encodeInOldWay())

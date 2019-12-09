@@ -24,7 +24,7 @@ import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
 
-class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,
+class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String?,
                             val destRegId: String, val vContract: ByteArray?,var feeSymbol:String,val coinSymbol:String):
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.UCONTRACT_INVOKE_TX, 1) {
     private var userPubKey:ByteArray?=null
@@ -36,13 +36,12 @@ class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Lon
         ss.write(VarInt(nValidHeight).encodeInOldWay())
         ss.writeUserId(srcRegId,userPubKey)
         ss.writeRegId(destRegId)
-        ss.writeCompactSize(vContract!!.size.toLong())//VarInt(vContract!!.size.toLong()).encodeInOldWay())
+        ss.writeCompactSize(vContract?.size?.toLong()!!)
         ss.write(vContract)
         ss.write(VarInt(fees).encodeInOldWay())
         ss.add(feeSymbol)
         ss.add(coinSymbol)
         ss.write(VarInt(value).encodeInOldWay())
-
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
         return hash
     }
@@ -52,16 +51,16 @@ class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Lon
         ss.write(VarInt(nTxType.value.toLong()).encodeInOldWay())
         ss.write(VarInt(nVersion).encodeInOldWay())
         ss.write(VarInt(nValidHeight).encodeInOldWay())
-        ss.writeUserId(srcRegId,userPubKey)
+        ss.writeUserId(srcRegId,this.userPubKey)
         ss.writeRegId(destRegId)
-        ss.writeCompactSize(vContract!!.size.toLong())
+        ss.writeCompactSize(vContract?.size?.toLong()!!)
         ss.write(vContract)
         ss.write(VarInt(fees).encodeInOldWay())
         ss.add(feeSymbol)
         ss.add(coinSymbol)
         ss.write(VarInt(value).encodeInOldWay())
         val sigSize = signature!!.size
-        ss.write(VarInt(sigSize.toLong()).encodeInOldWay())
+        ss.writeCompactSize(sigSize.toLong())
         ss.write(signature)
         val hexStr =  Utils.HEX.encode(ss.toByteArray())
         return hexStr

@@ -24,7 +24,7 @@ import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
 
-class WaykiContractTxParams(nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,
+class WaykiContractTxParams(nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String?,
                             val destRegId: String, val vContract: ByteArray?):
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.TX_CONTRACT, 1) {
     private var userPubKey:ByteArray?=null

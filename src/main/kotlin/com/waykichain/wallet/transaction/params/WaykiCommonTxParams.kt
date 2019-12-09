@@ -25,7 +25,7 @@ import org.bitcoinj.core.*
  * srcRegId: (regHeight-regIndex)
  * destAddr: 20-byte PubKeyHash
  */
-class WaykiCommonTxParams(nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String,var destAddr: String, val memo: String):
+class WaykiCommonTxParams(nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String?,var destAddr: String, val memo: String):
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.TX_COMMON, 1) {
 
     private var userPubKey:ByteArray?=null

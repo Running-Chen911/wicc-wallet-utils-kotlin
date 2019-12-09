@@ -15,20 +15,20 @@ import org.bitcoinj.core.VarInt
  * fee Minimum 0.001 wicc
  */
 class WaykiCdpLiquidateTxParams(nValidHeight: Long, fees: Long,
-                                val userId: String,  val cdpTxid: String? = cdpHash,
+                                val srcRegId: String?,  val cdpTxid: String,
                                var feeSymbol: String, val sCoinsToLiquidate: Long, val liquidateAssetSymbol:String) :
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.TX_CDPLIQUIDATE, 1) {
 
     private var userPubKey:ByteArray?=null
     override fun getSignatureHash(pubKey:String?): ByteArray {
         this.userPubKey=Utils.HEX.decode(pubKey)
-        val ss = HashWriter()
         val cdpTxHex = Utils.HEX.decode(cdpTxid).reversedArray()
        this.userPubKey = Utils.HEX.decode(pubKey)
+        val ss = HashWriter()
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, userPubKey)
+                .writeUserId(srcRegId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(cdpTxHex)
@@ -45,7 +45,7 @@ class WaykiCdpLiquidateTxParams(nValidHeight: Long, fees: Long,
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, this.userPubKey)
+                .writeUserId(srcRegId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(cdpTxHex)

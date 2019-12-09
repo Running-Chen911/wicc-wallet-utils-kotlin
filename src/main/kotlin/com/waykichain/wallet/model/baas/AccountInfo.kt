@@ -4,6 +4,10 @@ import com.waykichain.wallet.model.baas.parameter.BaseBean
 
 class BlockHeight(code:Int, msg:String,val data: Int):BaseBean(code, msg)
 
+class TxDetail(code:Int, msg:String,val data: TxDetailData):BaseBean(code, msg)
+
+data class TxDetailData(val txid:String?)
+
 class AccointInfo(code:Int, msg:String,val data: AccointData):BaseBean(code, msg)
 
 data class AccointData(

@@ -25,7 +25,7 @@ abstract class ApiClientGenerator<T>(baseUrl: String) {
                     val build = builder.build()
                     chain.proceed(build)
                 }
-                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE))
                 .connectTimeout(time_out, TimeUnit.SECONDS)
                 .readTimeout(time_out, TimeUnit.SECONDS)
                 .build()
@@ -65,13 +65,16 @@ fun <T : BaseBean> Observable<T>.mSubscribe(
                 onSuccess.invoke(t)
             } else {
                 if (!t.msg.isNullOrEmpty()) {
-                    t.msg?.let { }
+                    t.msg?.let {
+                       throw Exception(t?.msg)
+                    }
                 } else {
-
+                    throw Exception("NetWork Error")
                 }
             }
         }
         override fun onError(e: Throwable) {
+            throw e
         }
     })
 }

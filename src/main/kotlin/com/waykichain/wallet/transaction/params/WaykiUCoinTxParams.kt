@@ -14,7 +14,7 @@ import org.bitcoinj.core.VarInt
  * destAddr: 20-byte PubKeyHash
  * fee Minimum 0.001 wicc
  */
-class WaykiUCoinTxParams(nValidHeight: Long, val userId: String,val dests:List<UCoinDest>, var feeSymbol: String, fees: Long, val memo: String) :
+class WaykiUCoinTxParams(nValidHeight: Long, val regId: String?,val dests:List<UCoinDest>, var feeSymbol: String, fees: Long, val memo: String) :
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.TX_UCOIN_TRANSFER, 1) {
 
     private var userPubKey:ByteArray?=null
@@ -24,7 +24,7 @@ class WaykiUCoinTxParams(nValidHeight: Long, val userId: String,val dests:List<U
         ss.add(VarInt(nVersion).encodeInOldWay())
                 .add(nTxType.value)
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, this.userPubKey)
+                .writeUserId(regId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .addUCoinDestAddr(dests)
@@ -40,7 +40,7 @@ class WaykiUCoinTxParams(nValidHeight: Long, val userId: String,val dests:List<U
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, this.userPubKey)
+                .writeUserId(regId, this.userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .addUCoinDestAddr(dests)

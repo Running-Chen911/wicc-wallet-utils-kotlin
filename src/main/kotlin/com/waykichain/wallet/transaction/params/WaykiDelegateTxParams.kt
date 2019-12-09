@@ -36,7 +36,7 @@ class WaykiDelegateTxParams(val srcRegId: String, var voteLists: Array<OperVoteF
                 .writeUserId(srcRegId,userPubKey)
                 .add(voteLists)
                 .add(VarInt(fees).encodeInOldWay())
-                .add(VarInt(sigSize.toLong()).encodeInOldWay())
+                .writeCompactSize(sigSize.toLong())
                 .add(signature)
 
         val hexStr = Utils.HEX.encode(ss.toByteArray())

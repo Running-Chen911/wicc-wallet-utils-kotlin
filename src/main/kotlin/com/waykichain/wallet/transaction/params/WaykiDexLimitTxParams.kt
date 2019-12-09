@@ -13,7 +13,7 @@ import org.bitcoinj.core.VarInt
  * destAddr: 20-byte PubKeyHash
  * fee Minimum 0.0001 wicc
  */
-class WaykiDexLimitTxParams(nValidHeight: Long, fees: Long,val userId: String,var feeSymbol: String,
+class WaykiDexLimitTxParams(nValidHeight: Long, fees: Long,val srcRegId: String?,var feeSymbol: String,
                             val coinSymbol: String,val assetSymbol: String,val assetAmount: Long,val price:Long,
                             txType: WaykiTxType) :
         BaseSignTxParams(nValidHeight, fees, txType, 1) {
@@ -25,7 +25,7 @@ class WaykiDexLimitTxParams(nValidHeight: Long, fees: Long,val userId: String,va
         ss.add(VarInt(nVersion).encodeInOldWay())
                 .add(nTxType.value)
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, userPubKey)
+                .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(coinSymbol)
@@ -42,7 +42,7 @@ class WaykiDexLimitTxParams(nValidHeight: Long, fees: Long,val userId: String,va
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeUserId(userId, userPubKey)
+                .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)
                 .add(VarInt(fees).encodeInOldWay())
                 .add(coinSymbol)
