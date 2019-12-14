@@ -14,26 +14,21 @@
  * all copies or substantial portions of the Software.
  */
 
-package com.waykichain.wallet.transaction.params
+package com.waykichain.wallet.transaction.encode.params
 
-import org.bitcoinj.params.TestNet3Params
+import org.bitcoinj.params.MainNetParams
 
-/**
- * @Author: Richard Chen
- * @Date 2018/08/31 下午3:00
- */
-
-class WaykiTestNetParams: TestNet3Params() {
+class WaykiMainNetParams: MainNetParams() {
 
     init {
-        this.packetMagic = 0xd75c7dfd
-        this.addressHeader = 135
-        this.dumpedPrivateKeyHeader = 210
+        this.packetMagic = 0x1a1d42ff
+        this.addressHeader = 73
+        this.dumpedPrivateKeyHeader = 153
     }
 
-    private object Holder { val INSTANCE = WaykiTestNetParams() }
+    private object Holder { val INSTANCE = WaykiMainNetParams() }
 
     companion object {
-        val instance: WaykiTestNetParams by lazy { Holder.INSTANCE }
+        val instance: WaykiMainNetParams by lazy { Holder.INSTANCE }
     }
 }

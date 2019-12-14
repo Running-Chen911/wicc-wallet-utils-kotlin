@@ -14,27 +14,17 @@
  * all copies or substantial portions of the Software.
  */
 
-package com.waykichain.wallet.transaction.params
+package com.waykichain.wallet.transaction.encode.params
 
 import com.waykichain.wallet.encode.HashWriter
-import com.waykichain.wallet.encode.SYMBOL_MATCH
 import com.waykichain.wallet.encode.encodeInOldWay
-import com.waykichain.wallet.transaction.AssetUpdateData
 import com.waykichain.wallet.transaction.WaykiTxType
-import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
-import org.waykichain.wallet.util.Messages
-import org.waykichain.wallet.util.TokenException
 
-/**
- * srcRegId: (regHeight-regIndex)
- * destAddr: 20-byte PubKeyHash
- */
-class WaykiAssetUpdateTxParams(nValidHeight: Long, fees: Long, val srcRegId: String,var feeSymbol: String,
-                               val asset_symbol: String, val asset: AssetUpdateData) :
-        BaseSignTxParams( nValidHeight, fees, WaykiTxType.ASSET_UPDATE_TX, 1) {
+class WaykiRegisterAccountTxParams( nValidHeight: Long, fees: Long):
+        BaseSignTxParams(nValidHeight, fees, WaykiTxType.TX_REGISTERACCOUNT, 1) {
     private var userPubKey:ByteArray?=null
     override fun getSignatureHash(pubKey:String?): ByteArray {
         this.userPubKey=Utils.HEX.decode(pubKey)
@@ -42,34 +32,30 @@ class WaykiAssetUpdateTxParams(nValidHeight: Long, fees: Long, val srcRegId: Str
         ss.add(VarInt(nVersion).encodeInOldWay())
                 .add(nTxType.value)
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeRegId(srcRegId)
-                .add(feeSymbol)
+                .add(VarInt(33).encodeInOldWay())
+                .add(this.userPubKey)
+                .add(VarInt(0).encodeInOldWay())
                 .add(VarInt(fees).encodeInOldWay())
-                .add(asset_symbol)
-                .updateAsset(asset)
 
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
         return hash
     }
 
     override fun serializeTx(signature:ByteArray): String {
-        val symbolMatch = asset_symbol.matches(SYMBOL_MATCH.toRegex())
-        if (!symbolMatch) throw TokenException(Messages.SYMBOLNOTMATCH)
-        val sigSize = signature!!.size
+        val sigSize = signature.size
         val ss = HashWriter()
         ss.add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nVersion).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
-                .writeRegId(srcRegId)
-                .add(feeSymbol)
+                .add(33)
+                .add(this.userPubKey)
+                .add(0)
                 .add(VarInt(fees).encodeInOldWay())
-                .add(asset_symbol)
-                .updateAsset(asset)
                 .writeCompactSize(sigSize.toLong())
                 .add(signature)
 
-        val hexStr = Utils.HEX.encode(ss.toByteArray())
+        val bytes = ss.toByteArray()
+        val hexStr =  Utils.HEX.encode(bytes)
         return hexStr
     }
-
 }

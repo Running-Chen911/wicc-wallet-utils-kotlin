@@ -14,7 +14,7 @@
  * all copies or substantial portions of the Software.
  */
 
-package com.waykichain.wallet.transaction.params
+package com.waykichain.wallet.transaction.encode.params
 
 import com.waykichain.wallet.transaction.CoinType
 import com.waykichain.wallet.transaction.WaykiTxType

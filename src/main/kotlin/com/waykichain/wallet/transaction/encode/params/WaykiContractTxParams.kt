@@ -14,7 +14,7 @@
  * all copies or substantial portions of the Software.
  */
 
-package com.waykichain.wallet.transaction.params
+package com.waykichain.wallet.transaction.encode.params
 
 import com.waykichain.wallet.encode.HashWriter
 import com.waykichain.wallet.encode.encodeInOldWay
@@ -24,9 +24,9 @@ import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
 import org.bitcoinj.core.VarInt
 
-class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String?,
-                            val destRegId: String, val vContract: ByteArray?,var feeSymbol:String,val coinSymbol:String):
-        BaseSignTxParams( nValidHeight, fees, WaykiTxType.UCONTRACT_INVOKE_TX, 1) {
+class WaykiContractTxParams(nValidHeight: Long, fees: Long, val value: Long, val srcRegId: String?,
+                            val destRegId: String, val vContract: ByteArray?):
+        BaseSignTxParams( nValidHeight, fees, WaykiTxType.TX_CONTRACT, 1) {
     private var userPubKey:ByteArray?=null
     override fun getSignatureHash(pubKey:String?): ByteArray {
         this.userPubKey=Utils.HEX.decode(pubKey)
@@ -36,12 +36,10 @@ class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Lon
         ss.write(VarInt(nValidHeight).encodeInOldWay())
         ss.writeUserId(srcRegId,userPubKey)
         ss.writeRegId(destRegId)
-        ss.writeCompactSize(vContract?.size?.toLong()!!)
-        ss.write(vContract)
         ss.write(VarInt(fees).encodeInOldWay())
-        ss.add(feeSymbol)
-        ss.add(coinSymbol)
         ss.write(VarInt(value).encodeInOldWay())
+        ss.writeCompactSize(vContract!!.size.toLong())//(VarInt(vContract!!.size.toLong()).encodeInOldWay())
+        ss.write(vContract)
         val hash = Sha256Hash.hashTwice(ss.toByteArray())
         return hash
     }
@@ -53,12 +51,10 @@ class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Lon
         ss.write(VarInt(nValidHeight).encodeInOldWay())
         ss.writeUserId(srcRegId,this.userPubKey)
         ss.writeRegId(destRegId)
-        ss.writeCompactSize(vContract?.size?.toLong()!!)
-        ss.write(vContract)
         ss.write(VarInt(fees).encodeInOldWay())
-        ss.add(feeSymbol)
-        ss.add(coinSymbol)
         ss.write(VarInt(value).encodeInOldWay())
+        ss.writeCompactSize(vContract!!.size.toLong())
+        ss.write(vContract)
         val sigSize = signature!!.size
         ss.writeCompactSize(sigSize.toLong())
         ss.write(signature)

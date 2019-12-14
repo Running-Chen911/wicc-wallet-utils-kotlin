@@ -1,4 +1,4 @@
-package com.waykichain.wallet.base.params
+package com.waykichain.wallet.transaction.decode.params
 
 import org.bitcoinj.core.*
 
@@ -29,7 +29,7 @@ class WaykiSignMsgParams( val msg: String){
     fun serializeSignature(): SignResult {
         assert (signature != null)
         val signatureStr =  Utils.HEX.encode(signature)
-        val signResult=SignResult(signatureStr,publicKey)
+        val signResult= SignResult(signatureStr, publicKey)
 
         return signResult
     }

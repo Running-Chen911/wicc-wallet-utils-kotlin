@@ -19,7 +19,7 @@ package com.waykichain.wallet
 
 import com.waykichain.wallet.transaction.Language
 import com.waykichain.wallet.transaction.NetWorkType
-import com.waykichain.wallet.transaction.params.WaykiTestNetParams
+import com.waykichain.wallet.transaction.encode.params.WaykiTestNetParams
 import org.bitcoinj.core.*
 import org.junit.Before
 import org.junit.Test

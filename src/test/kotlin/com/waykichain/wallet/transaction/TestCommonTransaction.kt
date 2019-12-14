@@ -4,15 +4,13 @@ import com.waykichain.wallet.Wallet
 import com.waykichain.wallet.WalletManager
 import com.waykichain.wallet.WaykiTransactions
 import com.waykichain.wallet.client.ApiClientFactory
-import com.waykichain.wallet.client.BaasClient
+import com.waykichain.wallet.client.ApiClient
 import com.waykichain.wallet.encode.CAsset
 import com.waykichain.wallet.encode.OperVoteFund
 import com.waykichain.wallet.encode.UCoinDest
-import com.waykichain.wallet.transaction.params.*
+import com.waykichain.wallet.transaction.encode.params.*
 import com.waykichain.wallet.util.ContractUtil
-import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.Utils
-import org.bouncycastle.util.encoders.Hex
 import org.junit.Before
 import org.junit.Test
 import org.slf4j.LoggerFactory
@@ -20,12 +18,12 @@ import java.io.File
 
 class TestCommonTransaction {
     private val logger = LoggerFactory.getLogger(javaClass)
-    private var baasClient: BaasClient? = null
+    private var apiClient: ApiClient? = null
     private var wallet: Wallet? = null
 
     @Before
     fun setup() {
-        baasClient = ApiClientFactory.instance.newTestNetBaasClient()
+        apiClient = ApiClientFactory.instance.newTestNetNodeClient()
         wallet = WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET).importWalletFromPrivateKey("Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13")
     }
 
@@ -36,7 +34,7 @@ class TestCommonTransaction {
     @Test
     fun getAccountInfo() {
         val address = "WkMhG5aLEexLUFv7AWzhuFQ1FQxyFtpEQr"
-        val regid = baasClient?.getRegid(address)
+        val regid = apiClient?.getRegid(address)
         logger.info(regid)
     }
 
@@ -46,7 +44,7 @@ class TestCommonTransaction {
    * */
     @Test
     fun getBlockHeight() {
-        val blockHeight = baasClient?.getBlockHeight()
+        val blockHeight = apiClient?.getBlockHeight()
         logger.info(blockHeight.toString())
     }
 
@@ -57,12 +55,12 @@ class TestCommonTransaction {
       * */
     @Test
     fun generateRegisterTx() {
-        val blockHeight = baasClient?.getBlockHeight()
+        val blockHeight = apiClient?.getBlockHeight()
         val txParams = WaykiRegisterAccountTxParams(blockHeight!!, 10000000)
         var transaction = WaykiTransactions(txParams, wallet!!)
         var rawTxAsHex = transaction.genRawTx()//生成冷签名
         logger.info("rawTx:" + rawTxAsHex)
-        val txId = baasClient?.broadcastTransaction(transaction)
+        val txId = apiClient?.broadcastTransaction(transaction)
         logger.info("txId:" + txId)
     }
 
@@ -73,8 +71,8 @@ class TestCommonTransaction {
     * */
     @Test
     fun testGenerateCommonTxForTestNet() {
-        val blockHeight = baasClient?.getBlockHeight()
-        val regid = baasClient?.getRegid(wallet?.address!!)
+        val blockHeight = apiClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
         val destAddr = "wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4"
         val memo = "test transfer"
         val txParams = WaykiCommonTxParams(blockHeight!!, 100000000,
@@ -90,8 +88,8 @@ class TestCommonTransaction {
     @Test
     fun testGenerateContractTx() {
         //WRC20 Transfer
-        val regId = baasClient?.getRegid(wallet?.address!!)
-        val nValidHeight = baasClient?.getBlockHeight()
+        val regId = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
         val appId = "128711-1"
         val wrc20Amount = 100000000L // transfer 10000 WRC
         val destAddress = "wNPWqv9bvFCnMm1ddiQdH7fUwUk2Qgrs2N"
@@ -107,12 +105,12 @@ class TestCommonTransaction {
     * */
     @Test
     fun testGenerateUCoinTransferTx() {
-        val nValidHeight = baasClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()
         val coinSymbol = CoinType.WICC.type  //coind symbol
         val coinAmount = 10000L    //transfer amount
         val feeSymbol = CoinType.WICC.type
         val fees = 1000000L
-        val regid = baasClient?.getRegid(wallet?.address!!)
+        val regid = apiClient?.getRegid(wallet?.address!!)
         val memo = "转账"
         val dest1 = UCoinDest("wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4", coinSymbol, coinAmount)
         val dests = arrayListOf<UCoinDest>(dest1)
@@ -129,8 +127,8 @@ class TestCommonTransaction {
     fun testGenerateUCoinContractTx() {
         val value = 1000000000L
         val appid = "392366-3"
-        val regid = baasClient?.getRegid(wallet?.address!!)
-        val nValidHeight = baasClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
         val contractByte = ContractUtil.hexString2binaryString("f001")
         val txParams = WaykiUCoinContractTxParams(nValidHeight!!,
                 1000000, value, regid,
@@ -145,8 +143,8 @@ class TestCommonTransaction {
     * */
     @Test
     fun testDeployContractTx() {
-        val regid = baasClient?.getRegid(wallet?.address!!)
-        val nValidHeight = baasClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
         val file = File("hello.lua")
         val contractByte = file.readBytes();
         val description = "description script"
@@ -164,8 +162,8 @@ class TestCommonTransaction {
     fun testGenerateDelegateTx() {
         //VoteOperType.ADD_FUND  投票
         //VoteOperType.MINUS_FUND //撤销投票
-        val regid = baasClient?.getRegid(wallet?.address!!)
-        val nValidHeight = baasClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
         val array1 = OperVoteFund(VoteOperType.ADD_FUND.value,
                 Utils.HEX.decode("036c5397f3227a1e209952829d249b7ad0f615e43b763ac15e3a6f52627a10df21"),
                 100000000)
@@ -173,7 +171,7 @@ class TestCommonTransaction {
                 Utils.HEX.decode("036c5397f3227a1e209952829d249b7ad0f615e43b763ac15e3a6f52627a10df21"),
                 100000000)
         val array = arrayOf(array1,array2)
-        val txParams = WaykiDelegateTxParams(regid!!,  array, 10000000, nValidHeight!!)
+        val txParams = WaykiDelegateTxParams(regid!!, array, 10000000, nValidHeight!!)
        broadcastTransaction(txParams)
     }
 
@@ -187,8 +185,8 @@ class TestCommonTransaction {
     * */
     @Test
     fun testCAssetIssueTx() {
-        val regid = baasClient?.getRegid(wallet?.address!!)
-        val nValidHeight = baasClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
         val fee = 1000000L
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val symbol = "STOOOOO"
@@ -209,8 +207,8 @@ class TestCommonTransaction {
     @Test
     fun testCAssetUpdateTx() {
         val fee = 1000000L
-        val regid = baasClient?.getRegid(wallet?.address!!)
-        val nValidHeight = baasClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val asset = AssetUpdateData(AssetUpdateType.OWNER_UID, "0-2")  //update asset owner
         // val asset=AssetUpdateData(AssetUpdateType.NAME,"TestCoin") // update asset name
@@ -229,9 +227,9 @@ class TestCommonTransaction {
         var transaction = WaykiTransactions(txParams, wallet!!)
 
         var rawTxAsHex = transaction.genRawTx()//生成冷签名
-        logger.info("rawTxAsHex:" + rawTxAsHex)
+        logger.info("raw tx as hex:" + rawTxAsHex)
 
-        val txId = baasClient?.broadcastTransaction(transaction)
+        val txId = apiClient?.broadcastTransaction(transaction)
         logger.info("txId:" + txId)
     }
 

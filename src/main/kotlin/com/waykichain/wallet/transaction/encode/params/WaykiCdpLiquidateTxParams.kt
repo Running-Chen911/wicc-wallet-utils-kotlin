@@ -1,4 +1,4 @@
-package com.waykichain.wallet.transaction.params
+package com.waykichain.wallet.transaction.encode.params
 
 import com.waykichain.wallet.encode.HashWriter
 import com.waykichain.wallet.encode.cdpHash

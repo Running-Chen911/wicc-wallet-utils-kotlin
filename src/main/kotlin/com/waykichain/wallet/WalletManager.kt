@@ -3,8 +3,8 @@ package com.waykichain.wallet
 import com.google.common.collect.ImmutableList
 import com.waykichain.wallet.transaction.Language
 import com.waykichain.wallet.transaction.NetWorkType
-import com.waykichain.wallet.transaction.params.WaykiMainNetParams
-import com.waykichain.wallet.transaction.params.WaykiTestNetParams
+import com.waykichain.wallet.transaction.encode.params.WaykiMainNetParams
+import com.waykichain.wallet.transaction.encode.params.WaykiTestNetParams
 import com.waykichain.wallet.util.BIP44Path
 import com.waykichain.wallet.util.WaykiMnemonicCode
 import org.bitcoinj.core.DumpedPrivateKey

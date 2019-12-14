@@ -1,8 +1,8 @@
 package com.waykichain.wallet
 
-import com.waykichain.wallet.transaction.params.BaseSignTxParams
+import com.waykichain.wallet.transaction.encode.params.BaseSignTxParams
 
-class WaykiTransactions(var txParams: BaseSignTxParams,var wallet: Wallet) {
+class WaykiTransactions(var txParams: BaseSignTxParams, var wallet: Wallet) {
 
     fun genRawTx():String{
         val signature = wallet.signTx(txParams.getSignatureHash(wallet.publicKeyAsHex()))
@@ -10,7 +10,7 @@ class WaykiTransactions(var txParams: BaseSignTxParams,var wallet: Wallet) {
         return rawTxAsHex
     }
 
-    fun decodeTxRaw(rawTx:String):BaseSignTxParams?{
+    fun decodeTxRaw(rawTx:String): BaseSignTxParams?{
         return null
     }
 }

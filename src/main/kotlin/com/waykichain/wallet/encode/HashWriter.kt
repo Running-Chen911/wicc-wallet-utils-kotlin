@@ -17,7 +17,7 @@
 package com.waykichain.wallet.encode
 
 import com.waykichain.wallet.transaction.AssetUpdateData
-import com.waykichain.wallet.transaction.params.WaykiMainNetParams
+import com.waykichain.wallet.transaction.encode.params.WaykiMainNetParams
 import com.waykichain.wallet.util.longToBytes
 import com.waykichain.wallet.util.unLongToIntByteArray
 import com.waykichain.wallet.util.unLongToShortByteArray

@@ -4,11 +4,11 @@ import com.waykichain.wallet.Wallet
 import com.waykichain.wallet.WalletManager
 import com.waykichain.wallet.WaykiTransactions
 import com.waykichain.wallet.client.ApiClientFactory
-import com.waykichain.wallet.client.BaasClient
-import com.waykichain.wallet.transaction.params.BaseSignTxParams
-import com.waykichain.wallet.transaction.params.WaykiDexCancelOrderTxParams
-import com.waykichain.wallet.transaction.params.WaykiDexLimitTxParams
-import com.waykichain.wallet.transaction.params.WaykiDexMarketTxParams
+import com.waykichain.wallet.client.ApiClient
+import com.waykichain.wallet.transaction.encode.params.BaseSignTxParams
+import com.waykichain.wallet.transaction.encode.params.WaykiDexCancelOrderTxParams
+import com.waykichain.wallet.transaction.encode.params.WaykiDexLimitTxParams
+import com.waykichain.wallet.transaction.encode.params.WaykiDexMarketTxParams
 import org.junit.Before
 import org.junit.Test
 import org.slf4j.LoggerFactory
@@ -16,12 +16,12 @@ import org.slf4j.LoggerFactory
 class TestDexTransaction {
 
     private val logger = LoggerFactory.getLogger(javaClass)
-    private var baasClient: BaasClient? = null
+    private var apiClient: ApiClient? = null
     private var wallet: Wallet? = null
 
     @Before
     fun setup() {
-        baasClient = ApiClientFactory.instance.newTestNetBaasClient()
+        apiClient = ApiClientFactory.instance.newTestNetBaasClient()
         wallet = WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET).importWalletFromPrivateKey("Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13")
     }
 
@@ -32,9 +32,9 @@ class TestDexTransaction {
   * */
     @Test
     fun testDexBuyLimitTx() {
-        val nValidHeight = baasClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()
         val fee = 10000000L
-        val srcRegId = baasClient?.getRegid(wallet?.address!!)
+        val srcRegId = apiClient?.getRegid(wallet?.address!!)
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val coinSymbol = CoinType.WUSD.type
         val assetSymbol = CoinType.WICC.type
@@ -52,9 +52,9 @@ class TestDexTransaction {
     * */
     @Test
     fun testDexSellLimitTx() {
-        val nValidHeight = baasClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()
         val fee = 10000000L
-        val srcRegId = baasClient?.getRegid(wallet?.address!!)
+        val srcRegId = apiClient?.getRegid(wallet?.address!!)
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val coinSymbol = CoinType.WUSD.type
         val assetSymbol = CoinType.WICC.type
@@ -72,9 +72,9 @@ class TestDexTransaction {
     * */
     @Test
     fun testDexMarketBuyTx() {
-        val nValidHeight = baasClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()
         val fee = 10000000L
-        val srcRegId = baasClient?.getRegid(wallet?.address!!)
+        val srcRegId = apiClient?.getRegid(wallet?.address!!)
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val coinSymbol = CoinType.WUSD.type
         val assetSymbol = CoinType.WICC.type
@@ -91,9 +91,9 @@ class TestDexTransaction {
     * */
     @Test
     fun testDexMarketSellTx() {
-        val nValidHeight = baasClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()
         val fee = 10000000L
-        val srcRegId = baasClient?.getRegid(wallet?.address!!)
+        val srcRegId = apiClient?.getRegid(wallet?.address!!)
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val coinSymbol = CoinType.WUSD.type
         val assetSymbol = CoinType.WICC.type
@@ -110,9 +110,9 @@ class TestDexTransaction {
     * */
     @Test
     fun testDexCancelOrderTx() {
-        val nValidHeight = baasClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()
         val fee = 10000000L
-        val srcRegId = baasClient?.getRegid(wallet?.address!!)
+        val srcRegId = apiClient?.getRegid(wallet?.address!!)
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val dexOrderId = "009c0e665acdd9e8ae754f9a51337b85bb8996980a93d6175b61edccd3cdc144" //dex order tx hash
         val txParams = WaykiDexCancelOrderTxParams(nValidHeight!!, fee, srcRegId,
@@ -128,10 +128,10 @@ class TestDexTransaction {
         var transaction = WaykiTransactions(txParams, wallet!!)
 
         var rawTxAsHex = transaction.genRawTx()//生成冷签名
-        logger.info("rawTxAsHex:" + rawTxAsHex)
+        logger.info("raw tx as hex:" + rawTxAsHex)
 
-        val txId = baasClient?.broadcastTransaction(transaction)
-        logger.info("txId:" + txId)
+        val txId = apiClient?.broadcastTransaction(transaction)
+        logger.info("txid:" + txId)
     }
 
 }

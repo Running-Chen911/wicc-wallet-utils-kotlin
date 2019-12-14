@@ -5,7 +5,7 @@ import com.waykichain.wallet.model.baas.AccointInfo
 import com.waykichain.wallet.model.baas.BlockHeight
 import io.reactivex.Observable
 
-interface BaasClient :BaseClient{
+interface ApiClient{
     fun getRegid(address: String): String?
     fun getBlockHeight(): Long?
     fun broadcastTransaction(transactions: WaykiTransactions):String?

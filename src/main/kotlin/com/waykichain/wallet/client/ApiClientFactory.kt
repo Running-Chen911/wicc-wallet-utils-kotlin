@@ -1,6 +1,7 @@
 package com.waykichain.wallet.client
 
 import com.waykichain.wallet.client.impl.BaasClientImpl
+import com.waykichain.wallet.client.impl.NodeClientImpl
 
 class ApiClientFactory {
 
@@ -12,16 +13,23 @@ class ApiClientFactory {
         val instance: ApiClientFactory by lazy { Holder.INSTANCE }
     }
 
-    fun newTestNetBaasClient(): BaasClient {
+    fun newTestNetBaasClient(): ApiClient {
         return newBaasClient(ChainEnvirment.TESTNET.baasUrl)
     }
 
-    fun newMainNetBaasClient(): BaasClient {
+    fun newMainNetBaasClient(): ApiClient {
         return newBaasClient(ChainEnvirment.MAINNET.baasUrl)
     }
 
-    private fun newBaasClient(baseUrl: String): BaasClient {
+    private fun newBaasClient(baseUrl: String): ApiClient {
         return BaasClientImpl(baseUrl)
     }
 
+    fun newTestNetNodeClient(): ApiClient {
+        return newNodeClient(ChainEnvirment.TESTNET.nodeUrl)
+    }
+
+    private fun newNodeClient(baseUrl: String): ApiClient {
+        return NodeClientImpl(baseUrl)
+    }
 }

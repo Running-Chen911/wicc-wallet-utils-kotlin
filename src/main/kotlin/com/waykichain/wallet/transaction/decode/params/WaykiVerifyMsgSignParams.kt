@@ -1,6 +1,5 @@
-package com.waykichain.wallet.base.params
+package com.waykichain.wallet.transaction.decode.params
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import org.bitcoinj.core.*
 
 
@@ -31,10 +30,10 @@ class WaykiVerifyMsgSignParams(val signature:String ,val publicKey:String ,val m
         return address
     }
 
-    fun verifyMsgSignature(): VerifyMsgSignatureResult{
+    fun verifyMsgSignature(): VerifyMsgSignatureResult {
 
         val addrFromPubKey = this.getAddressFromPublicKey()
-        var verifyMsgSignatureResult = VerifyMsgSignatureResult(false,"")
+        var verifyMsgSignatureResult = VerifyMsgSignatureResult(false, "")
 
         if (addrFromPubKey != null){
             val msgBytes = msg.toByteArray()

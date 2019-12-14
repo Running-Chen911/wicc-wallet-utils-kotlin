@@ -4,9 +4,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.waykichain.wallet.model.baas.AccointInfo
 import com.waykichain.wallet.model.baas.parameter.BaseBean
+import com.waykichain.wallet.model.node.rpc.RpcBaseBean
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,8 +23,12 @@ abstract class ApiClientGenerator<T>(baseUrl: String) {
     init {
         val httpClient = OkHttpClient.Builder()
                 .addInterceptor { chain ->
+                    val authToken = Credentials.basic("wayki", "admin@123")
                     val builder = chain.request().newBuilder()
+                             .header("Authorization", authToken)
+                            .header("Accept", "application/json")
                     val build = builder.build()
+
                     chain.proceed(build)
                 }
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE))
@@ -52,7 +58,7 @@ abstract class ApiClientGenerator<T>(baseUrl: String) {
 }
 
 
-fun <T : BaseBean> Observable<T>.mSubscribe(
+fun <T : BaseBean> Observable<T>.baasSubscribe(
         onSuccess: (T) -> Unit) {
     this.subscribe(object : Observer<T> {
         override fun onComplete() {
@@ -73,6 +79,36 @@ fun <T : BaseBean> Observable<T>.mSubscribe(
                 }
             }
         }
+        override fun onError(e: Throwable) {
+            throw e
+        }
+    })
+}
+
+fun <T : RpcBaseBean> Observable<T>.nodeSubscribe(
+        onSuccess: (T) -> Unit) {
+    this.subscribe(object : Observer<T> {
+        override fun onComplete() {
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: T) {
+            if (t.error == null) {
+                onSuccess.invoke(t)
+            } else {
+                if (!t.error.message.isNullOrEmpty()) {
+                    t.error.message?.let {
+                        throw Exception(t?.error.message)
+                    }
+                } else {
+                    throw Exception("NetWork Error")
+                }
+            }
+        }
+
         override fun onError(e: Throwable) {
             throw e
         }
