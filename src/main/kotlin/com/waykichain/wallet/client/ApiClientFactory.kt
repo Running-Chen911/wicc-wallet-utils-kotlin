@@ -25,11 +25,15 @@ class ApiClientFactory {
         return BaasClientImpl(baseUrl)
     }
 
-    fun newTestNetNodeClient(): ApiClient {
-        return newNodeClient(ChainEnvirment.TESTNET.nodeUrl)
+    fun newTestNetNodeClient(authToken:String): ApiClient {
+        return newNodeClient(ChainEnvirment.TESTNET.nodeUrl,authToken)
     }
 
-    private fun newNodeClient(baseUrl: String): ApiClient {
-        return NodeClientImpl(baseUrl)
+    fun newMainNetNodeClient(authToken:String): ApiClient {
+        return newNodeClient(ChainEnvirment.MAINNET.nodeUrl,authToken)
+    }
+
+    private fun newNodeClient(baseUrl: String,authToken:String): ApiClient {
+        return NodeClientImpl(baseUrl,authToken)
     }
 }

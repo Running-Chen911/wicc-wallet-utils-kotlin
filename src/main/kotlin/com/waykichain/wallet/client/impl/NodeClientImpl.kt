@@ -10,10 +10,10 @@ import com.waykichain.wallet.model.node.rpc.RpcAccountInfoBean
 import com.waykichain.wallet.model.node.rpc.SubmitTxRawBean
 import java.util.ArrayList
 
-class NodeClientImpl (baseUrl: String) :ApiClient{
+class NodeClientImpl (baseUrl: String,authToken:String) :ApiClient{
     private var waykiRetrofit: NodeRetrofit?=null
     init{
-        this.waykiRetrofit = NodeRetrofit(baseUrl)
+        this.waykiRetrofit = NodeRetrofit(baseUrl,authToken)
     }
 
     override fun getRegid(address: String): String? {

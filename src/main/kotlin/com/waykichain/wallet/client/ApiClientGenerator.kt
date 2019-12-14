@@ -16,17 +16,17 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-abstract class ApiClientGenerator<T>(baseUrl: String) {
+abstract class ApiClientGenerator<T>(baseUrl: String,authToken:String) {
     private val time_out: Long = 15//超时时间
     var apiService: T
 
     init {
         val httpClient = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    val authToken = Credentials.basic("wayki", "admin@123")
                     val builder = chain.request().newBuilder()
-                             .header("Authorization", authToken)
-                            .header("Accept", "application/json")
+                            if(!authToken.isNullOrBlank()){
+                                builder.header("Authorization", authToken)
+                            }
                     val build = builder.build()
 
                     chain.proceed(build)

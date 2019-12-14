@@ -10,6 +10,7 @@ import com.waykichain.wallet.encode.OperVoteFund
 import com.waykichain.wallet.encode.UCoinDest
 import com.waykichain.wallet.transaction.encode.params.*
 import com.waykichain.wallet.util.ContractUtil
+import okhttp3.Credentials
 import org.bitcoinj.core.Utils
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +24,15 @@ class TestCommonTransaction {
 
     @Before
     fun setup() {
-        apiClient = ApiClientFactory.instance.newTestNetNodeClient()
+        /*
+        * 连接接节点
+        * */
+        //val authToken = Credentials.basic("wayki", "admin@123") //需要提供节点rpc 用户名和密码
+        //apiClient = ApiClientFactory.instance.newTestNetNodeClient(authToken)
+        /*
+        * 连接baas
+        * */
+        apiClient = ApiClientFactory.instance.newTestNetBaasClient()
         wallet = WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET).importWalletFromPrivateKey("Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13")
     }
 
