@@ -19,6 +19,7 @@ package com.waykichain.wallet.transaction.encode.params
 import com.waykichain.wallet.encode.HashWriter
 import com.waykichain.wallet.encode.encodeInOldWay
 import com.waykichain.wallet.transaction.WaykiTxType
+import com.waykichain.wallet.transaction.decode.HashReader
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Utils
@@ -28,6 +29,7 @@ class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Lon
                             val destRegId: String, val vContract: ByteArray?,var feeSymbol:String,val coinSymbol:String):
         BaseSignTxParams( nValidHeight, fees, WaykiTxType.UCONTRACT_INVOKE_TX, 1) {
     private var userPubKey:ByteArray?=null
+    private var signature:ByteArray?=null
     override fun getSignatureHash(pubKey:String?): ByteArray {
         this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
@@ -65,4 +67,42 @@ class WaykiUCoinContractTxParams( nValidHeight: Long, fees: Long, val value: Lon
         val hexStr =  Utils.HEX.encode(ss.toByteArray())
         return hexStr
     }
+
+    companion object {
+        fun unSerializeTx(ss: HashReader): BaseSignTxParams {
+            val nVersion = ss.readVarInt().value
+            val nValidHeight = ss.readVarInt().value
+            val array = ss.readUserId()
+            val srcRegId = array[0]
+            val publicKey = array[1]
+            val destRegId = ss.readRegId()
+            val vContract = ss.readByteArray()
+            val fees = ss.readVarInt().value
+            val feeSymbol = ss.readString()
+            val coinSymbol = ss.readString()
+            val value = ss.readVarInt().value
+            val signature = ss.readByteArray()
+            val ret = WaykiUCoinContractTxParams( nValidHeight, fees, value, srcRegId, destRegId, vContract, feeSymbol, coinSymbol)
+            ret.signature = signature
+            ret.nVersion = nVersion
+            return ret
+        }
+    }
+    override fun toString(): String {
+        val builder = StringBuilder()
+        builder.append("[nTxType]=").append(nTxType).append("\n")
+                .append("[nVersion]=").append(nVersion).append("\n")
+                .append("[nValidHeight]=").append(nValidHeight).append("\n")
+                .append("[srcRegId]=").append(srcRegId).append("\n")
+                .append("[destRegId]=").append(destRegId).append("\n")
+                .append("[pubKey]=").append(userPubKey).append("\n")
+                .append("[feeSymbol]=").append(feeSymbol).append("\n")
+                .append("[coinSymbol]=").append(coinSymbol).append("\n")
+                .append("[fees]=").append(fees).append("\n")
+                .append("[value]=").append(value).append("\n")
+                .append("[vContract]=").append(Utils.HEX.encode(vContract)).append("\n")
+                .append("[signature]=").append(Utils.HEX.encode(signature)).append("\n")
+        return builder.toString()
+    }
+
 }
