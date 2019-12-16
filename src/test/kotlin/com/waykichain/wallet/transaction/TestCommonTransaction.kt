@@ -210,7 +210,7 @@ class TestCommonTransaction {
     * Asset Update
     * asset_symbol 大写字母A-Z 1-7 位 [A_Z]
     * Symbol Capital letter A-Z 1-7 digits [A_Z]
-    * fee Minimum 0.01 wicc
+    * fee Minimum 0.001 wicc
     * account - 110 wicc
     * */
     @Test
@@ -235,7 +235,7 @@ class TestCommonTransaction {
     fun broadcastTransaction(txParams: BaseSignTxParams) {
         var transaction = WaykiTransactions(txParams, wallet!!)
 
-        var rawTxAsHex = transaction.genRawTx()//生成冷签名
+        var rawTxAsHex = transaction.genRawTx()//generate rawtx
         logger.info("raw tx as hex:" + rawTxAsHex)
 
         val txId = apiClient?.broadcastTransaction(transaction)

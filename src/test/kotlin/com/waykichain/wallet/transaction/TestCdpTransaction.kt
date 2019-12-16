@@ -31,7 +31,7 @@ class TestCdpTransaction {
     * */
     @Test
     fun testGenerateCdpStakeTx() {
-        val nValidHeight = apiClient?.getBlockHeight()
+        val nValidHeight = apiClient?.getBlockHeight()//获得区块高度
         val fee = 10000000L
         val srcRegId = apiClient?.getRegid(wallet?.address!!)
         val cdpTxid = "" //wallet cdp create tx hash
@@ -40,7 +40,7 @@ class TestCdpTransaction {
         val sCoinSymbol = CoinType.WUSD.type  // get coind symbol
         val bCoinToStake = 10000000000L  //stake amount WICC
         val sCoinToMint = 60000000L   //get amount WUSD
-        val map = mapOf<String, Long>(Pair(bCoinSymbol, bCoinToStake));
+        val map = mapOf<String, Long>(Pair(bCoinSymbol, bCoinToStake))
         val txParams = WaykiCdpStakeTxParams(nValidHeight!!, fee, srcRegId, cdpTxid, feeSymbol, map, sCoinSymbol, sCoinToMint)
         broadcastTransaction(txParams)
     }

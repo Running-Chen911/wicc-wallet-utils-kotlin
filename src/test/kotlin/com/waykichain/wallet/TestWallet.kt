@@ -38,7 +38,7 @@ class TestWallet {
 
     @Before
     fun setup(){
-        walletManager=WalletManager.init(NetWorkType.WAYKICHAIN_MAINNET)
+        walletManager=WalletManager.init(NetWorkType.WAYKICHAIN_TESTNET)
     }
 
     /*
