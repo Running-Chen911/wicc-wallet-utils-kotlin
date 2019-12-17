@@ -43,7 +43,8 @@ class TestWallet {
 
     /*
     * 生成助记词 generate Mnemonic
-    * Language.ENGLISH Language.CHINESE
+    * Language.ENGLISH
+    * Language.CHINESE
     * */
     @Test
     fun generateMnemonic() {
@@ -52,7 +53,8 @@ class TestWallet {
     }
 
     /*
-    * 助记词生成维基链钱包 Mnemonic to WaykiChain Wallet
+    * 助记词生成维基链钱包
+    * Mnemonic to WaykiChain Wallet
     * */
     @Test
     fun generateWalletFromMnemonic() {
