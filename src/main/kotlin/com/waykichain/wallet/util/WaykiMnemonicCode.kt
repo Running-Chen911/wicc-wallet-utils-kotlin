@@ -77,7 +77,7 @@ class WaykiMnemonicCode{
                 ?: throw FileNotFoundException(resource)
     }
 
-    fun checkMnemonic(mnemonicCodes: List<String>){
+    fun checkMnemonic(mnemonicCodes: List<String>):List<String>{
         var mn= ArrayList<String>(12)
         if(isChinese(mnemonicCodes?.get(0).get(0))){
             var lists= ArrayList<Int>(12)
@@ -99,6 +99,7 @@ class WaykiMnemonicCode{
             mn=mnemonicCodes as ArrayList<String>
         }
         MnemonicCode.INSTANCE.check(mn)
+        return mn
     }
 
     fun getWordList(path: String):ArrayList<String>{
