@@ -23,7 +23,7 @@ class WaykiDexLimitTxParams(nValidHeight: Long, fees: Long,val srcRegId: String?
         this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
                 .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)

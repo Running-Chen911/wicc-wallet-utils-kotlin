@@ -33,7 +33,7 @@ class WaykiCommonTxParams(nValidHeight: Long, fees: Long, val value: Long, val s
         this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
                 .writeUserId(srcRegId,userPubKey)
                 .writeAddress(destAddr)

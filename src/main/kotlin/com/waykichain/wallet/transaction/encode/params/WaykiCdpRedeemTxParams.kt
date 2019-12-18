@@ -24,7 +24,7 @@ class WaykiCdpRedeemTxParams(nValidHeight: Long, fees: Long,val srcRegId: String
         val ss = HashWriter()
         val cdpTxHex = Utils.HEX.decode(cdpTxid).reversedArray()
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
                 .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)

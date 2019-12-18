@@ -32,7 +32,7 @@ class WaykiRegisterAccountTxParams( nValidHeight: Long, fees: Long):
         this.userPubKey=Utils.HEX.decode(pubKey)
         val ss = HashWriter()
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
                 .add(VarInt(33).encodeInOldWay())
                 .add(this.userPubKey)

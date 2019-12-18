@@ -23,7 +23,7 @@ class WaykiDexCancelOrderTxParams(nValidHeight: Long, fees: Long,val srcRegId: S
         val ss = HashWriter()
         val orderIdByte = Utils.HEX.decode(orderId).reversedArray()
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
                 .writeUserId(srcRegId, userPubKey)
                 .add(feeSymbol)

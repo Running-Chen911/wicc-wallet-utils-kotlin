@@ -22,7 +22,7 @@ class WaykiUCoinTxParams(nValidHeight: Long, val regId: String?,val dests:List<U
         val ss = HashWriter()
        this.userPubKey = Utils.HEX.decode(pubKey)
         ss.add(VarInt(nVersion).encodeInOldWay())
-                .add(nTxType.value)
+                .add(VarInt(nTxType.value.toLong()).encodeInOldWay())
                 .add(VarInt(nValidHeight).encodeInOldWay())
                 .writeUserId(regId, this.userPubKey)
                 .add(feeSymbol)
