@@ -68,7 +68,7 @@ class WalletManager {
 
     private  fun validateMnemonics(mnemonicCodes: List<String>) {
         try {
-            MnemonicCode.INSTANCE.check(mnemonicCodes)
+            WaykiMnemonicCode.create().checkMnemonic(mnemonicCodes)
         } catch (e: org.bitcoinj.crypto.MnemonicException.MnemonicLengthException) {
             throw TokenException(Messages.MNEMONIC_INVALID_LENGTH)
         } catch (e: org.bitcoinj.crypto.MnemonicException.MnemonicWordException) {
@@ -84,7 +84,7 @@ class WalletManager {
 
     private fun toMnemonicCodes(lang: Language): List<String> {
         try {
-            return WaykiMnemonicCode.create(lang).generateMnemonic()
+            return WaykiMnemonicCode.create().generateMnemonic(lang)
         } catch (e: org.bitcoinj.crypto.MnemonicException.MnemonicLengthException) {
             throw TokenException(Messages.MNEMONIC_INVALID_LENGTH)
         } catch (e: Exception) {

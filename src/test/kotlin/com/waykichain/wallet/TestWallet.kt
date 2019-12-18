@@ -60,10 +60,10 @@ class TestWallet {
     * */
     @Test
     fun generateWalletFromMnemonic() {
-        val mn = "wreck wheat chunk fiber maze opera recipe must glory empower summer bind"
+        val mn = "星 交 直 成 开 冯 姑 迁 消 板 沙 晶"//"wreck wheat chunk fiber maze opera recipe must glory empower summer bind"
         val words = mn.split(" ")
         val wallet = walletManager?.importWalletFromMnemonic(words)
-        assert("wN2bLau1zDLyn9H83hQhZn2wMQxCrdZxpQ".equals(wallet?.address))
+        assert("wf5ywXQ6oHhswYsVRXRcjJRJXnAWGYgj5w".equals(wallet?.address))
         logger.info(wallet.toString())
     }
 
