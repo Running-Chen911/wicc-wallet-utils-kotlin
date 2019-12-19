@@ -134,7 +134,7 @@ class TestCommonTransaction {
     * */
     @Test
     fun testGenerateUCoinContractTx() {
-        val value = 1000000000L
+      val value = 1000000000L
         val appid = "392366-3"
         val regid = apiClient?.getRegid(wallet?.address!!)
         val nValidHeight = apiClient?.getBlockHeight()

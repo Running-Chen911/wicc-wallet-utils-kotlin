@@ -46,13 +46,13 @@ class WalletManager {
         return randomMnemonicCodes(lang)
     }
 
-    fun importWalletFromMnemonic(mnemonics: List<String>): Wallet{
+    fun importWalletFromMnemonic(mnemonics: List<String>,passphrase:String,path:String): Wallet{
         var mnemonic=validateMnemonics(mnemonics)
         val bip44Path= if (network == WaykiMainNetParams.instance) BIP44Path.WAYKICHAIN_MAINNET_WALLET_PATH
         else BIP44Path.WAYKICHAIN_TESTNET_WALLET_PATH
-        val seed = DeterministicSeed(mnemonic, null, "", 0L)
+        val seed = DeterministicSeed(mnemonic, null, passphrase, 0L)
         val keyChain = DeterministicKeyChain.builder().seed(seed).build()
-        val mainKey = keyChain.getKeyByPath(generatePath(bip44Path), true)
+        val mainKey = keyChain.getKeyByPath(generatePath(bip44Path+path), true)
         val address = LegacyAddress.fromPubKeyHash(network, mainKey.pubKeyHash).toString()
         val ecKey = ECKey.fromPrivate(mainKey.privKey)
         val privateKey = ecKey.getPrivateKeyAsWiF(network)
