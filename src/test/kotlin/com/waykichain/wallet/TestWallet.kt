@@ -63,8 +63,8 @@ class TestWallet {
         val mn = "星 交 直 成 开 冯 姑 迁 消 板 沙 晶"
         //"hope cause blade aerobic artwork velvet ocean unfold current engine group inner"
         val words = mn.split(" ")
-        val passphrase="" //修改不同的passphrase 生成不同私钥 默认passphrase为空
-        val bip44Path="/0'/0/0" //通过修改bip44层级生成不同私钥
+        val passphrase="" // 修改不同的passphrase 生成不同私钥 默认passphrase为空
+        val bip44Path="/0'/0/0" //  通过修改bip44层级生成不同私钥  / account' / change / address_index
         val wallet = walletManager?.importWalletFromMnemonic(words,passphrase,bip44Path)
         assert("wMdciD4Zd2YW8NqJDjs3VwMm3ERRSAMMNA".equals(wallet?.address))
         logger.info(wallet.toString())
