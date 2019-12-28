@@ -1,19 +1,24 @@
 package com.waykichain.wallet.util
 
+import com.google.common.io.BaseEncoding
 import com.waykichain.wallet.transaction.Language
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.crypto.MnemonicCode
+import org.bitcoinj.crypto.MnemonicException
 import java.io.*
 import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 import java.security.SecureRandom
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
+import kotlin.experimental.and
 
 class WaykiMnemonicCode{
     private val BIP39_CHINESE_SIMPLE_RESOURCE_NAME = "mnemonic/wordlist/chinese_simple.txt"
     private val BIP39_CHINESE_SIMPLE_SHA256 = "bfd683b91db88609fabad8968c7efe4bf69606bf5a49ac4a4ba5e355955670cb"
     private val SECURE_RANDOM = SecureRandom()
     private val BIP39_ENGLISH_RESOURCE_NAME = "mnemonic/wordlist/english.txt"
+    val HEX = BaseEncoding.base16().lowerCase()
     companion object {
         private var instance: WaykiMnemonicCode? = null
             get() {
@@ -61,9 +66,10 @@ class WaykiMnemonicCode{
     fun generateMnemonic(language: Language): List<String> {
         when (language) {
             Language.CHINESE -> {
-                val stream = openDefaultWords(BIP39_CHINESE_SIMPLE_RESOURCE_NAME)
-                val mn = MnemonicCode(stream, BIP39_CHINESE_SIMPLE_SHA256)
-                return mn.toMnemonic(generateRandomBytes(16))
+               // val stream = openDefaultWords(BIP39_CHINESE_SIMPLE_RESOURCE_NAME)
+               // val mn = MnemonicCode(stream, BIP39_CHINESE_SIMPLE_SHA256)
+                val words=getWordList(BIP39_CHINESE_SIMPLE_RESOURCE_NAME)
+                return toMnemonic(generateRandomBytes(16),words)
             }
             else -> {
                 return MnemonicCode().toMnemonic(generateRandomBytes(16))
@@ -118,6 +124,55 @@ class WaykiMnemonicCode{
         } while (true)
         br.close()
         return wordList
+    }
+
+    @Throws(MnemonicException.MnemonicLengthException::class)
+    fun toMnemonic(entropy: ByteArray,wordsList:ArrayList<String>): List<String> {
+        if (entropy.size % 4 > 0)
+            throw MnemonicException.MnemonicLengthException("Entropy length not multiple of 32 bits.")
+
+        if (entropy.size == 0)
+            throw MnemonicException.MnemonicLengthException("Entropy is empty.")
+
+        // We take initial entropy of ENT bits and compute its
+        // checksum by taking first ENT / 32 bits of its SHA256 hash.
+
+        val hash = Sha256Hash.hash(entropy)
+        val hashBits = bytesToBits(hash)
+
+        val entropyBits = bytesToBits(entropy)
+        val checksumLengthBits = entropyBits.size / 32
+
+        // We append these bits to the end of the initial entropy.
+        val concatBits = BooleanArray(entropyBits.size + checksumLengthBits)
+        System.arraycopy(entropyBits, 0, concatBits, 0, entropyBits.size)
+        System.arraycopy(hashBits, 0, concatBits, entropyBits.size, checksumLengthBits)
+
+        // Next we take these concatenated bits and split them into
+        // groups of 11 bits. Each group encodes number from 0-2047
+        // which is a position in a wordlist.  We convert numbers into
+        // words and use joined words as mnemonic sentence.
+
+        val words = java.util.ArrayList<String>()
+        val nwords = concatBits.size / 11
+        for (i in 0 until nwords) {
+            var index = 0
+            for (j in 0..10) {
+                index = index shl 1
+                if (concatBits[i * 11 + j])
+                    index = index or 0x1
+            }
+            words.add(wordsList.get(index))
+        }
+        return words
+    }
+
+    private fun bytesToBits(data: ByteArray): BooleanArray {
+        val bits = BooleanArray(data.size * 8)
+        for (i in data.indices)
+            for (j in 0..7)
+                bits[i * 8 + j] = data[i].toInt() and (1 shl 7 - j) != 0
+        return bits
     }
 
 }
