@@ -21,6 +21,7 @@ import com.waykichain.wallet.transaction.Language
 import com.waykichain.wallet.transaction.NetWorkType
 import com.waykichain.wallet.transaction.decode.params.WaykiSignMsgParams
 import com.waykichain.wallet.transaction.decode.params.WaykiVerifyMsgSignParams
+import com.waykichain.wallet.transaction.encode.params.WaykiMainNetParams
 import com.waykichain.wallet.transaction.encode.params.WaykiTestNetParams
 import org.bitcoinj.core.*
 import org.junit.Before
@@ -51,6 +52,7 @@ class TestWallet {
     @Test
     fun generateMnemonic() {
        var words= walletManager?.randomMnemonic(Language.CHINESE)
+
         logger.info(words.toString())
     }
 
@@ -75,10 +77,21 @@ class TestWallet {
        * */
     @Test
     fun testImportPrivKey() {
-        val privKeyWiF = "Y7UiVRpTAZNDtZakSHZwebHD6romu9jcuj1tjjujzwbSqdKLCEQZ"//"YBb6tdJvQyD8VwxJ4HUjDfpcpmFc359uGFQLbegaaKr6FJY863iw"//"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
+       /* val privKeyWiF = "Y7UiVRpTAZNDtZakSHZwebHD6romu9jcuj1tjjujzwbSqdKLCEQZ"//"YBb6tdJvQyD8VwxJ4HUjDfpcpmFc359uGFQLbegaaKr6FJY863iw"//"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
         val wallet = walletManager?.importWalletFromPrivateKey(privKeyWiF)
         assert("wZCst8wFgxiaNptqhheMvRugdngMJMZAKL".equals(wallet?.address))
-        logger.info(wallet.toString())
+        logger.info(wallet.toString())*/
+
+        val pubkey="03c89c66ee32e26ee2c1bf624dc01d6d3e8eb9a09d0a0c86383944871054c1fcc6"
+        val ecKey=ECKey.fromPublicOnly(Utils.HEX.decode(pubkey))
+         val  address1 = LegacyAddress.fromKey(WaykiMainNetParams.instance,ecKey).toBase58()
+        logger.info(address1)
+        val ecKey2=ECKey.fromPublicOnly(Utils.HEX.decode( "021be050c7e67004dc494f52ca81ff7c100a7e8b527b1c5c18091c3ad7065c4d94"))
+        val  address2 = LegacyAddress.fromKey(WaykiTestNetParams.instance,ecKey2).toBase58()
+        logger.info(address2)
+        val ecKey3=ECKey.fromPublicOnly(Utils.HEX.decode("033f51c7ef38ee34d1fe436dbf6329821d1863f22cee69c281c58374dcb9c35569"))
+        val  address3 = LegacyAddress.fromKey(WaykiTestNetParams.instance,ecKey3).toBase58()
+        logger.info(address3)
     }
 
     @Test
