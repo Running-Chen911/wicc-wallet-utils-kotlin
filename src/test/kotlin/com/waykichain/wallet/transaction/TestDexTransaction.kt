@@ -78,9 +78,9 @@ class TestDexTransaction {
         val feeSymbol = CoinType.WICC.type  //fee symbol
         val coinSymbol = CoinType.WUSD.type
         val assetSymbol = CoinType.WICC.type
-        val assetAmount = 1 * 100000000L
+        val coinAmount = 1 * 100000000L
         val txParams = WaykiDexMarketTxParams(nValidHeight!!, fee, srcRegId,
-                feeSymbol, coinSymbol, assetSymbol, assetAmount, WaykiTxType.DEX_BUY_MARKET_ORDER_TX)
+                feeSymbol, coinSymbol, assetSymbol, coinAmount, WaykiTxType.DEX_BUY_MARKET_ORDER_TX)
         broadcastTransaction(txParams)
     }
 

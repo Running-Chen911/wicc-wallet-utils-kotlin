@@ -62,7 +62,7 @@ class TestWallet {
     * */
     @Test
     fun generateWalletFromMnemonic() {
-        val mn = "星 交 直 成 开 冯 姑 迁 消 板 沙 晶"
+        val mn = "星 交 直 成 开 冯 姑 迁 消 板 沙 s"
         //"hope cause blade aerobic artwork velvet ocean unfold current engine group inner"
         val words = mn.split(" ")
         val passphrase="" // 修改不同的passphrase 生成不同私钥 默认passphrase为空
@@ -77,21 +77,10 @@ class TestWallet {
        * */
     @Test
     fun testImportPrivKey() {
-       /* val privKeyWiF = "Y7UiVRpTAZNDtZakSHZwebHD6romu9jcuj1tjjujzwbSqdKLCEQZ"//"YBb6tdJvQyD8VwxJ4HUjDfpcpmFc359uGFQLbegaaKr6FJY863iw"//"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
+        val privKeyWiF = "Y7UiVRpTAZNDtZakSHZwebHD6romu9jcuj1tjjujzwbSqdKLCEQZ"//"YBb6tdJvQyD8VwxJ4HUjDfpcpmFc359uGFQLbegaaKr6FJY863iw"//"YAHcraeGRDpvwBWVccV7NLGAU6uK39nNUTip8srbJSu6HKSTfDcC"
         val wallet = walletManager?.importWalletFromPrivateKey(privKeyWiF)
         assert("wZCst8wFgxiaNptqhheMvRugdngMJMZAKL".equals(wallet?.address))
-        logger.info(wallet.toString())*/
-
-        val pubkey="03c89c66ee32e26ee2c1bf624dc01d6d3e8eb9a09d0a0c86383944871054c1fcc6"
-        val ecKey=ECKey.fromPublicOnly(Utils.HEX.decode(pubkey))
-         val  address1 = LegacyAddress.fromKey(WaykiMainNetParams.instance,ecKey).toBase58()
-        logger.info(address1)
-        val ecKey2=ECKey.fromPublicOnly(Utils.HEX.decode( "021be050c7e67004dc494f52ca81ff7c100a7e8b527b1c5c18091c3ad7065c4d94"))
-        val  address2 = LegacyAddress.fromKey(WaykiTestNetParams.instance,ecKey2).toBase58()
-        logger.info(address2)
-        val ecKey3=ECKey.fromPublicOnly(Utils.HEX.decode("033f51c7ef38ee34d1fe436dbf6329821d1863f22cee69c281c58374dcb9c35569"))
-        val  address3 = LegacyAddress.fromKey(WaykiTestNetParams.instance,ecKey3).toBase58()
-        logger.info(address3)
+        logger.info(wallet.toString())
     }
 
     @Test

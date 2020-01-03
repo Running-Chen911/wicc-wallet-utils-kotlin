@@ -7,6 +7,7 @@ class Messages{
        val MNEMONIC_INVALID_CHECKSUM = "mnemonic checksum invalid"
        val UNKNOWN = "unknown"
        val SYMBOLNOTMATCH = "Symbol does not match"
-       val INVALID_NETWORK_TYPE = "Invalid network type"
+       val INVALID_NETWORK_TYPE = "invalid network type"
+       val INVALID_CN_MN = "invalid Chinese mnemonic"
    }
 }

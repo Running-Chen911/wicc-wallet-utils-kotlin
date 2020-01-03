@@ -53,7 +53,7 @@ enum class WaykiTxType(val value: Int) {
 enum class CoinType(val type: String) {
     WICC("WICC"),
     WUSD("WUSD"),
-    WGRT("WICC"),
+    WGRT("WGRT"),
     WCNY("WCNY"),
     WBTC("WBTC"),
     WETH("WETH"),

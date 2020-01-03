@@ -5,6 +5,8 @@ import com.waykichain.wallet.transaction.Language
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.crypto.MnemonicCode
 import org.bitcoinj.crypto.MnemonicException
+import org.waykichain.wallet.util.Messages.Companion.INVALID_CN_MN
+import org.waykichain.wallet.util.TokenException
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -46,15 +48,6 @@ class WaykiMnemonicCode{
             }
             return false;
         }
-
-        /**
-         * 是否是英文
-         * @param c
-         * @return
-         */
-        fun isEnglish(charaString: String): Boolean {
-            return charaString.matches("^[a-zA-Z]*".toRegex());
-        }
     }
 
     private fun generateRandomBytes(size: Int): ByteArray {
@@ -86,6 +79,12 @@ class WaykiMnemonicCode{
     fun checkMnemonic(mnemonicCodes: List<String>):List<String>{
         var mn= ArrayList<String>(12)
         if(isChinese(mnemonicCodes?.get(0).get(0))){
+
+            mnemonicCodes?.forEach{it->
+                if (!isChinese(it.get(0))) throw TokenException(INVALID_CN_MN)
+            }
+
+
             var lists= ArrayList<Int>(12)
            var wordList_zh =getWordList(BIP39_CHINESE_SIMPLE_RESOURCE_NAME)
             var wordList_en =getWordList(BIP39_ENGLISH_RESOURCE_NAME)
