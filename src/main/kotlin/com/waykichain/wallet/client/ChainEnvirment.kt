@@ -6,8 +6,8 @@ class ChainEnvirment(val baasUrl: String, val nodeUrl: String) {
         /*
         * 请替换为自己的节点IP
         * */
-        val TESTNET_INSTANCE = ChainEnvirment("https://baas-test.wiccdev.org","http://10.0.0.20:6968")
-        val MAINNET_INSTANCE = ChainEnvirment("https://baas.wiccdev.org","http://10.0.0.20:6968")
+        val TESTNET_INSTANCE = ChainEnvirment("https://baas-test.wiccdev.org","http://10.0.0.114:6968")
+        val MAINNET_INSTANCE = ChainEnvirment("https://baas.wiccdev.org","http://10.0.0.114:6968")
     }
 
     companion object {

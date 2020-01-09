@@ -6,6 +6,7 @@ import com.waykichain.wallet.WaykiTransactions
 import com.waykichain.wallet.client.ApiClientFactory
 import com.waykichain.wallet.client.ApiClient
 import com.waykichain.wallet.encode.CAsset
+import com.waykichain.wallet.encode.InlineTransaction
 import com.waykichain.wallet.encode.OperVoteFund
 import com.waykichain.wallet.encode.UCoinDest
 import com.waykichain.wallet.transaction.encode.params.*
@@ -27,8 +28,8 @@ class TestCommonTransaction {
         /*
         * 连接接节点
         * */
-        //val authToken = Credentials.basic("wayki", "admin@123") //需要提供节点rpc 用户名和密码
-        //apiClient = ApiClientFactory.instance.newTestNetNodeClient(authToken)
+       // val authToken = Credentials.basic("simon", "xin123456") //需要提供节点rpc 用户名和密码
+       // apiClient = ApiClientFactory.instance.newTestNetNodeClient(authToken)
         /*
         * 连接baas
         * */
@@ -227,6 +228,38 @@ class TestCommonTransaction {
         broadcastTransaction(txParams)
     }
 
+    /*
+       * 昵称注册
+       * Nickid  register
+       * asset_symbol 大写字母A-Z 1-7 位 [A_Z]
+       * Symbol Capital letter A-Z 1-7 digits [A_Z]
+       * fee Minimum 0.001 wicc
+       * */
+    @Test
+    fun testRegisterNickidTx() {
+        val fee = 1000000L
+        val nickId = "waykichain11"
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val nValidHeight = apiClient?.getBlockHeight()
+        val feeSymbol="WICC"
+        val txParams = WaykiNickidRegesterTxParames(nValidHeight!!, fee, nickId,regid!!,feeSymbol)
+        broadcastTransaction(txParams)
+    }
+
+    @Test
+    fun testWasmDeployTx(){
+        val abiFile = File("hello.abi")
+        val abiByte = abiFile.readBytes();
+        val wasm = File("hello.wasm")
+        val wasmContract= wasm.inputStream().readBytes()
+        val nValidHeight = apiClient?.getBlockHeight()
+        val regid = apiClient?.getRegid(wallet?.address!!)
+        val feeSymbol="WICC"
+        val fee = 1000000L
+       // val transaction=InlineTransaction("waykichain11","")
+      //  val txParams = WaykiWasmDeployTxParames(nValidHeight!!, fee, regid!!,abiByte,wasmContract)
+       // broadcastTransaction(txParams)
+    }
 
     /*
     * 广播交易
@@ -238,8 +271,8 @@ class TestCommonTransaction {
         var rawTxAsHex = transaction.genRawTx()//generate rawtx
         logger.info("raw tx as hex:" + rawTxAsHex)
 
-        val txId = apiClient?.broadcastTransaction(transaction)
-        logger.info("txId:" + txId)
+        //val txId = apiClient?.broadcastTransaction(transaction)
+       // logger.info("txId:" + txId)
     }
 
 }

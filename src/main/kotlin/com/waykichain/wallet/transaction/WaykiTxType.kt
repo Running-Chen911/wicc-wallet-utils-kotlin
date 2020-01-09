@@ -39,8 +39,9 @@ enum class WaykiTxType(val value: Int) {
     DEX_BUY_LIMIT_ORDER_TX(84), //!< dex buy limit price order Tx
     DEX_SELL_LIMIT_ORDER_TX(85),//!< dex sell limit price order Tx
     DEX_BUY_MARKET_ORDER_TX(86),//!< dex buy market price order Tx
-    DEX_SELL_MARKET_ORDER_TX(87);//!< dex sell market price order Tx
-
+    DEX_SELL_MARKET_ORDER_TX(87),//!< dex sell market price order Tx
+    NICKID_REGISTER_TX(50),    //!< nickid register Tx
+    WASM_CONTRACT_TX(60); //!< wasm contract tx
     companion object {
         val map = WaykiTxType.values().associateBy(WaykiTxType::value)
         fun init(value: Int): WaykiTxType {
