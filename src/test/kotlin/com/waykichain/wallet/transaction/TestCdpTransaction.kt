@@ -27,7 +27,7 @@ class TestCdpTransaction {
     /*
     * 创建,追加cdp交易
     * Create or append an  cdp transaction
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testGenerateCdpStakeTx() {
@@ -48,7 +48,7 @@ class TestCdpTransaction {
     /*
     * 赎回cdp交易
     * Redeem cdp transaction
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testRedeemCdpTx() {
@@ -68,7 +68,7 @@ class TestCdpTransaction {
     /*
     * 清算cdp交易
     * Liquidate cdp transaction
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testLiquidateCdpTx() {

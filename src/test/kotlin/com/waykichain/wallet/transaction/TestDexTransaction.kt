@@ -28,7 +28,7 @@ class TestDexTransaction {
     /*
   * Dex 限价买单交易
   * Dex limit price transaction
-  * fee Minimum 0.001 wicc
+  * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
   * */
     @Test
     fun testDexBuyLimitTx() {
@@ -48,7 +48,7 @@ class TestDexTransaction {
     /*
     * Dex 限价卖单交易
     * Dex limit sell price transaction
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testDexSellLimitTx() {
@@ -68,7 +68,7 @@ class TestDexTransaction {
     /*
      *  Dex 市价买单交易
      * Dex market buy price transaction
-     * fee Minimum 0.001 wicc
+     * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testDexMarketBuyTx() {
@@ -87,7 +87,7 @@ class TestDexTransaction {
     /*
      *  Dex 市价卖单交易
      * Dex market sell price transaction
-     * fee Minimum 0.001 wicc
+     * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testDexMarketSellTx() {
@@ -106,7 +106,7 @@ class TestDexTransaction {
     /*
     *  Dex 取消挂单交易
     * Dex cancel order tx
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testDexCancelOrderTx() {

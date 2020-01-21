@@ -25,7 +25,7 @@ class TestCommonTransaction {
     @Before
     fun setup() {
         /*
-        * 连接接节点
+        * 连接接维基链节点
         * */
         //val authToken = Credentials.basic("wayki", "admin@123") //需要提供节点rpc 用户名和密码
         //apiClient = ApiClientFactory.instance.newTestNetNodeClient(authToken)
@@ -92,7 +92,7 @@ class TestCommonTransaction {
     /*
     * 合约调用交易
     * Contract transaction sample
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd ，if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testGenerateContractTx() {
@@ -110,7 +110,7 @@ class TestCommonTransaction {
     /*
     * 多币种转账交易 ,支持多种币种转账
     * Test nUniversal Coin Transfer Tx
-    * fee Minimum 0.001 wicc
+    * fee Minimum 0.001 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testGenerateUCoinTransferTx() {
@@ -130,7 +130,7 @@ class TestCommonTransaction {
     /*
     * 多币种合约调用交易
     * Contract transaction sample
-    * fee Minimum 0.01 wicc
+    * fee Minimum 0.01 wicc/wusd,if no regid, fee Minimum 0.002 wicc/wusd
     * */
     @Test
     fun testGenerateUCoinContractTx() {
@@ -165,7 +165,7 @@ class TestCommonTransaction {
     /*
     * 投票交易
     * Voting transaction
-    * fee Minimum 0.01 wicc
+    * fee Minimum 0.01 wicc,if no regid, fee Minimum 0.002 wicc
     * */
     @Test
     fun testGenerateDelegateTx() {
