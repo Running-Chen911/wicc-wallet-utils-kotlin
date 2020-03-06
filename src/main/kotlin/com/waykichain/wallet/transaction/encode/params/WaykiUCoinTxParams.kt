@@ -87,7 +87,7 @@ class WaykiUCoinTxParams(nValidHeight: Long, val regId: String?,val dests:List<U
                 .append("[memo]=").append(memo).append("\n")
                 .append("[signature]=").append(Utils.HEX.encode(signature)).append("\n")
         for(dest in dests) {
-            builder.append("[destAddress]=").append(dest.destAddress).append("\n")
+            builder.append("[destAddress]=").append(dest.destUserId).append("\n")
                     .append("[coinSymbol]=").append(dest.coinSymbol).append("\n")
                     .append("[transferAmount]=").append(dest.transferAmount).append("\n")
         }

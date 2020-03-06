@@ -58,7 +58,7 @@ class TestCommonTransaction {
     }
 
     /*
-      * 账户注册交易,新版本已基本废弃，可改用公钥注册，免注册费用
+      * 账户注册交易,新版本已基本废弃，首次交易可使用公钥注册，免注册费用
       * Account registration transaction, the new version has been abandoned, you can use public key registration, free registration fee
        * fee Minimum 0.1 wicc
       * */
@@ -122,7 +122,8 @@ class TestCommonTransaction {
         val regid = apiClient?.getRegid(wallet?.address!!)
         val memo = "转账"
         val dest1 = UCoinDest("wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4", coinSymbol, coinAmount)
-        val dests = arrayListOf<UCoinDest>(dest1)
+        val dest2 = UCoinDest("981018-2", coinSymbol, coinAmount)
+        val dests = arrayListOf<UCoinDest>(dest1,dest2)
         val txParams = WaykiUCoinTxParams(nValidHeight!!, regid, dests.toList(), feeSymbol, fees, memo)
         broadcastTransaction(txParams)
     }

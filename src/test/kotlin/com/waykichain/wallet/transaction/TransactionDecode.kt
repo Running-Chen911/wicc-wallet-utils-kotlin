@@ -12,7 +12,7 @@ class TransactionDecode {
     fun testParseTransactionRaw() {
         val waykiTransactions=WaykiTransactions()
         val netParams = WaykiTestNetParams.instance
-        var rawtx = "0b0180cb4c21036c5397f3227a1e209952829d249b7ad0f615e43b763ac15e3a6f52627a10df21045749434383e1ac000114079b9296a00a2b655787fa90e66ec3cde4bf1c8c0457494343cd1006e8bdace8b4a647304502210097cfa3068593913894fceeddc724e0848fb7c2012d406e3d3f21eab9211d208702203bd0835017bccd054a3770d6c838925760cc3de70ac646919705192f7c160751"
+        var rawtx = "0b0180e3b7740480fe4a050457494343bc83400214079b9296a00a2b655787fa90e66ec3cde4bf1c8c0457494343cd1004baef1a020457494343cd1006e8bdace8b4a64630440220338e8bcbfb81b5ad6024afe0030e6529139b82f47736317ab3f31202dd71f526022037512c60f4a3b84ae0fbca4ac4d528c8d22c002727611fba99325baa8bfa30fb"
         var ret = waykiTransactions.decodeTxRaw(rawtx, netParams)
         logger.info(ret.toString())
 

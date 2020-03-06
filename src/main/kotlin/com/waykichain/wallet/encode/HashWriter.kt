@@ -200,7 +200,11 @@ class HashWriter : ByteArrayOutputStream() {
     fun addUCoinDestAddr(dests:List<UCoinDest>): HashWriter {
         this.write(VarInt(dests.size.toLong()).encodeInOldWay())
         for (dest in dests) {
-            this.writeAddress(dest.destAddress)
+            if(dest.destUserId?.contains("-")){
+                this.writeRegId(dest.destUserId)
+            }else{
+                this.writeAddress(dest.destUserId)
+            }
             this.add(dest.coinSymbol)
             this.write(VarInt(dest.transferAmount).encodeInOldWay())
         }
@@ -213,5 +217,5 @@ const val SYMBOL_MATCH="[A-Z]{6,7}$"
 
 data class WaykiRegId(var regHeight: Long, var regIndex: Long)
 data class OperVoteFund(var voteType: Int, var pubKey: ByteArray, var voteValue: Long)
-data class UCoinDest(var destAddress: String, var coinSymbol: String, var transferAmount: Long)
+data class UCoinDest(var destUserId: String, var coinSymbol: String, var transferAmount: Long)
 data class CAsset(var symbol: String, var ownerRegid: String, var name: String, var totalSupply: Long, var minTable: Boolean)

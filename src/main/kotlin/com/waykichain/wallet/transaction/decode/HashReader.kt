@@ -85,11 +85,18 @@ class HashReader(buf: ByteArray) : ByteArrayInputStream(buf) {
         for(a in 1..size) {
             val len = this.readVarInt()
             val array = ByteArray(len.value.toInt())
+            var userId=""
+            if(array.size==20){
             this.read(array,0, len.value.toInt())
-            val addr  = LegacyAddress.fromPubKeyHash(params, array)
+             userId  = LegacyAddress.fromPubKeyHash(params, array).toBase58()
+            }else{
+                val height = this.readVarInt().value
+                val index = this.readVarInt().value
+                userId=height.toString() + "-" + index.toString()
+            }
             val coinSymbol = this.readString()
             val transferAmount = this.readVarInt().value
-            dests.add(UCoinDest(addr.toBase58(), coinSymbol, transferAmount))
+            dests.add(UCoinDest(userId, coinSymbol, transferAmount))
         }
     }
 
